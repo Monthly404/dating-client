@@ -1,12 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
+import { Container } from "./common/Container";
 
 const Header: React.FC = () => {
   return (
     <header className="app-header">
-      <div className="header-container">
-        <h1 className="logo">소개팅 각</h1>
-      </div>
+      <Container className="header-inner">
+        <Link to="/" className="logo">
+          소개팅 각
+        </Link>
+      </Container>
     </header>
   );
 };

@@ -10,11 +10,8 @@
   align-items: center;
 }
 
-.header-container {
-  width: 100%;
-  max-width: var(--container-width);
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
+.header-inner {
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,4 +22,6 @@
   color: var(--color-accent);
   font-weight: 800;
   letter-spacing: -0.5px;
+  text-decoration: none;
+  cursor: pointer;
 }
