@@ -57,8 +57,20 @@ const MainView: React.FC = () => {
         </section>
 
         <section className="content-section">
-          <div className="section-header">
+          <div
+            className="section-header"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <h2>전체 모임</h2>
+            <select className="sort-select" defaultValue="recommend">
+              <option value="recommend">추천순</option>
+              <option value="latest">최신순</option>
+              <option value="low-price">낮은가격순</option>
+            </select>
           </div>
 
           <div className="content-layout">
