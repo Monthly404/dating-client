@@ -1,0 +1,290 @@
+import React, { useState, useEffect } from "react";
+import "./FilterSection.css";
+
+const seoulDistricts = [
+  "강남구",
+  "서초구",
+  "송파구",
+  "마포구",
+  "용산구",
+  "성동구",
+  "종로구",
+  "중구",
+  "영등포구",
+  "광진구",
+  "강서구",
+  "서대문구",
+  "기타",
+];
+
+const FilterSection: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Prevent background scrolling when modal is open (Mobile only)
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  // Reset modal state on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isOpen]);
+
+  // States
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState(50000);
+
+  // New States
+  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+  const [selectedAges, setSelectedAges] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
+
+  // Helper Toggle Functions
+  const toggleSelection = (
+    list: string[],
+    setList: React.Dispatch<React.SetStateAction<string[]>>,
+    item: string
+  ) => {
+    if (list.includes(item)) {
+      setList(list.filter((i) => i !== item));
+    } else {
+      setList([...list, item]);
+    }
+  };
+
+  return (
+    <>
+      {/* Mobile Trigger Button */}
+      <button className="mobile-filter-trigger" onClick={() => setIsOpen(true)}>
+        <span className="filter-label">필터 설정</span>
+      </button>
+
+      {/* Filter Section: Sidebar on Desktop, Modal on Mobile */}
+      <aside className={`filter-section ${isOpen ? "is-open" : ""}`}>
+        <div className="filter-header">
+          <h3>필터</h3>
+          {/* Close button for Mobile Modal */}
+          <button className="close-filter-btn" onClick={() => setIsOpen(false)}>
+            ✕
+          </button>
+        </div>
+
+        <div className="filter-content-scroll">
+          {/* 1. Date Range */}
+          <div className="filter-group">
+            <h4>기간</h4>
+            <div className="date-range-container">
+              <label className="date-input-label">
+                <input
+                  type="date"
+                  className="filter-input-date"
+                  placeholder="시작일"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+                <span className="label-text">부터</span>
+              </label>
+              <label className="date-input-label">
+                <input
+                  type="date"
+                  className="filter-input-date"
+                  placeholder="종료일"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+                <span className="label-text">까지</span>
+              </label>
+            </div>
+          </div>
+
+          {/* 2. Region */}
+          <div className="filter-group">
+            <h4>지역</h4>
+            <div className="district-grid">
+              {seoulDistricts.map((district) => (
+                <button
+                  key={district}
+                  className={`district-btn ${
+                    selectedDistricts.includes(district) ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    toggleSelection(
+                      selectedDistricts,
+                      setSelectedDistricts,
+                      district
+                    )
+                  }
+                >
+                  {district}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 3. Days */}
+          <div className="filter-group">
+            <h4>요일</h4>
+            <div className="day-toggles">
+              {["월", "화", "수", "목", "금", "토", "일"].map((day) => (
+                <button
+                  key={day}
+                  className={`day-btn ${
+                    selectedDays.includes(day) ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    toggleSelection(selectedDays, setSelectedDays, day)
+                  }
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 4. Time */}
+          <div className="filter-group">
+            <h4>시간대</h4>
+            <div className="chip-container">
+              {["오전", "오후", "저녁"].map((time) => (
+                <button
+                  key={time}
+                  className={`chip-btn ${
+                    selectedTimes.includes(time) ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    toggleSelection(selectedTimes, setSelectedTimes, time)
+                  }
+                >
+                  {time}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 5. Age */}
+          <div className="filter-group">
+            <h4>연령대</h4>
+            <div className="chip-container">
+              {["20대", "30대"].map((age) => (
+                <button
+                  key={age}
+                  className={`chip-btn ${
+                    selectedAges.includes(age) ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    toggleSelection(selectedAges, setSelectedAges, age)
+                  }
+                >
+                  {age}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 6. Price */}
+          <div className="filter-group">
+            <div className="price-header">
+              <h4>가격대</h4>
+              <span className="price-value">
+                {priceRange === 100000
+                  ? "10만원 이상"
+                  : `${priceRange.toLocaleString()}원`}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="1000"
+              max="100000"
+              step="1000"
+              value={priceRange}
+              onChange={(e) => setPriceRange(Number(e.target.value))}
+              className="price-slider"
+            />
+            <div className="price-labels">
+              <span>1천원</span>
+              <span>10만원~</span>
+            </div>
+          </div>
+
+          {/* 7. Type */}
+          <div className="filter-group">
+            <h4>운영 주체</h4>
+            <div className="segment-control">
+              {["전체", "지자체", "사설"].map((type) => (
+                <button
+                  key={type}
+                  className={`segment-btn ${
+                    selectedType === type ||
+                    (type === "전체" && selectedType === "")
+                      ? "active"
+                      : ""
+                  }`}
+                  onClick={() => setSelectedType(type === "전체" ? "" : type)}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 8. Other (Concepts) */}
+          <div className="filter-group">
+            <h4>기타</h4>
+            <div className="chip-container">
+              {[
+                "솔로지옥",
+                "환승연애",
+                "블라인드",
+                "애프터파티",
+                "음주",
+                "온라인",
+              ].map((concept) => (
+                <button
+                  key={concept}
+                  className={`chip-btn ${
+                    selectedConcepts.includes(concept) ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    toggleSelection(
+                      selectedConcepts,
+                      setSelectedConcepts,
+                      concept
+                    )
+                  }
+                >
+                  {concept}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Removed 'Done' button as per request */}
+        </div>
+      </aside>
+
+      {/* Backdrop for mobile */}
+      {isOpen && (
+        <div className="filter-backdrop" onClick={() => setIsOpen(false)} />
+      )}
+    </>
+  );
+};
+
+export default FilterSection;

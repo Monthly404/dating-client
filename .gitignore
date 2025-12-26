@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Allow .agent folder for Rules and Workflows
+!.agent/

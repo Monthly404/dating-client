@@ -1,0 +1,41 @@
+.app-footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid rgba(0, 0, 0, 0.05); /* Match Header border */
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md); /* Add padding here to match Header */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on very small screens */
+  gap: var(--spacing-md);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin: 0; /* Remove bottom margin */
+}
+
+.footer-links a {
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--color-primary);
+}
+
+.copyright {
+  font-size: 0.75rem;
+  color: #999;
+  margin: 0;
+}
