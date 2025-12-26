@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
 import SEO from "./common/SEO";
+import { Container } from "./common/Container";
+import { Select } from "./common/Select";
 import "./MainView.css";
 import { HERO_SLIDES, MEETINGS } from "../constants";
 
@@ -22,10 +24,16 @@ const MainView: React.FC = () => {
     navigate(`/meeting/${id}`);
   };
 
+  const sortOptions = [
+    { value: "recommend", label: "추천순" },
+    { value: "latest", label: "최신순" },
+    { value: "low-price", label: "낮은가격순" },
+  ];
+
   return (
     <div className="main-view">
       <SEO /> {/* Default SEO for Main Page */}
-      <div className="container">
+      <Container>
         <section className="hero-section">
           <h2>지금 뜨는 인기 모임</h2>
           <div className="hero-carousel">
@@ -66,11 +74,7 @@ const MainView: React.FC = () => {
             }}
           >
             <h2>전체 모임</h2>
-            <select className="sort-select" defaultValue="recommend">
-              <option value="recommend">추천순</option>
-              <option value="latest">최신순</option>
-              <option value="low-price">낮은가격순</option>
-            </select>
+            <Select options={sortOptions} defaultValue="recommend" />
           </div>
 
           <div className="content-layout">
@@ -111,7 +115,7 @@ const MainView: React.FC = () => {
             )}
           </div>
         </section>
-      </div>
+      </Container>
     </div>
   );
 };

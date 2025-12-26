@@ -1,0 +1,19 @@
+.ds-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--color-bg);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: var(--color-secondary);
+  transition: all 0.2s;
+}
+
+.ds-tag.interactive {
+  cursor: pointer;
+}
+
+.ds-tag.interactive:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--color-primary);
+}
