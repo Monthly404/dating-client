@@ -25,6 +25,15 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 24px;
+  /* Layout */
+  --container-width: 1140px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
 }
 
 body {

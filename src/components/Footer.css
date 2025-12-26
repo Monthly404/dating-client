@@ -7,13 +7,14 @@
 }
 
 .footer-content {
-  max-width: 1000px;
+  width: 100%;
+  max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-md); /* Add padding here to match Header */
+  padding: 0 var(--spacing-md);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* Allow wrapping on very small screens */
+  flex-wrap: wrap;
   gap: var(--spacing-md);
 }
 

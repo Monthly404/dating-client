@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./DetailView.css";
 import meetingImg from "../assets/meeting_wine.png";
 
 const DetailView: React.FC = () => {
+  // Scroll to top when DetailView mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="detail-page">
       <div className="detail-container">

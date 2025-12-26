@@ -12,9 +12,12 @@
 
 .header-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logo {

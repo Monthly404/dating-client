@@ -1,8 +1,9 @@
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-md);
+.main-view {
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
 }
+
+/* .container style removed to use global style from index.css */
 
 .hero-section {
   margin-bottom: var(--spacing-xl);
