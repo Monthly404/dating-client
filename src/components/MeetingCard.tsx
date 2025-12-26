@@ -16,9 +16,7 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
 
       <div className="card-content">
         <div className="card-meta">{meeting.location}</div>
-        <h3 className="card-title" style={{ whiteSpace: "pre-line" }}>
-          {meeting.title}
-        </h3>
+        <h3 className="card-title">{meeting.title}</h3>
         <div className="card-price">{meeting.price}</div>
         <div className="card-tags">
           {meeting.tags.map((tag, index) => (

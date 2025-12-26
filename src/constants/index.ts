@@ -59,7 +59,7 @@ import meetingWine from "../assets/meeting_wine.png";
 export const MEETINGS: import("../types").Meeting[] = [
   {
     id: 1,
-    title: "프리미엄 와인과 함께하는\n금요 파티",
+    title: "프리미엄 와인과 함께하는 금요 파티",
     subtitle: "와인소셜클럽에서 주최하는 2030 직장인 네트워킹",
     image: meetingWine,
     location: "강남구 · 와인 클래스",
@@ -71,7 +71,7 @@ export const MEETINGS: import("../types").Meeting[] = [
   },
   {
     id: 2,
-    title: "토요일 오후,\n한강 러닝 크루",
+    title: "토요일 오후, 한강 러닝 크루",
     subtitle: "건강한 땀방울 뒤에 이어지는 시원한 치맥",
     image: meetingWine, // Placeholder using same image for now
     location: "반포 · 러닝",
@@ -83,7 +83,7 @@ export const MEETINGS: import("../types").Meeting[] = [
   },
   {
     id: 3,
-    title: "직장인 퇴근길\n비어 챗",
+    title: "직장인 퇴근길 비어 챗",
     subtitle: "하루의 피로를 날리는 가벼운 맥주 한 잔",
     image: meetingWine,
     location: "용산구 · 펍",
@@ -95,7 +95,7 @@ export const MEETINGS: import("../types").Meeting[] = [
   },
   {
     id: 4,
-    title: "주말 브런치\n쿠킹 클래스",
+    title: "주말 브런치 쿠킹 클래스",
     subtitle: "함께 요리하고 다이닝까지 즐기는 시간",
     image: meetingWine,
     location: "성동구 · 쿠킹",
@@ -107,7 +107,7 @@ export const MEETINGS: import("../types").Meeting[] = [
   },
   {
     id: 5,
-    title: "퇴근 후\n독서 모임",
+    title: "퇴근 후 독서 모임",
     subtitle: "책 한 권으로 나누는 깊은 대화",
     image: meetingWine,
     location: "마포구 · 독서",
@@ -119,7 +119,7 @@ export const MEETINGS: import("../types").Meeting[] = [
   },
   {
     id: 6,
-    title: "불금\n루프탑 파티",
+    title: "불금 루프탑 파티",
     subtitle: "야경과 함께 즐기는 칵테일 파티",
     image: meetingWine,
     location: "이태원 · 파티",
