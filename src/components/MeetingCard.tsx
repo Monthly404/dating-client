@@ -1,25 +1,29 @@
 import React from "react";
 import "./MeetingCard.css";
-import meetingImg from "../assets/meeting_wine.png";
+import type { Meeting } from "../types";
 
 interface MeetingCardProps {
+  meeting: Meeting;
   onClick: () => void;
 }
 
-const MeetingCard: React.FC<MeetingCardProps> = ({ onClick }) => {
+const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
   return (
     <div className="meeting-card" onClick={onClick}>
       <div className="card-image-wrapper">
-        <img src={meetingImg} alt="Meeting" className="card-image" />
+        <img src={meeting.image} alt={meeting.title} className="card-image" />
       </div>
 
       <div className="card-content">
-        <div className="card-meta">강남구 · 와인 클래스</div>
-        <h3 className="card-title">프리미엄 와인과 함께하는 금요 파티</h3>
-        <div className="card-price">50,000원</div>
+        <div className="card-meta">{meeting.location}</div>
+        <h3 className="card-title" style={{ whiteSpace: "pre-line" }}>
+          {meeting.title}
+        </h3>
+        <div className="card-price">{meeting.price}</div>
         <div className="card-tags">
-          <span>#직장인</span>
-          <span>#2030</span>
+          {meeting.tags.map((tag, index) => (
+            <span key={index}>{tag}</span>
+          ))}
         </div>
       </div>
     </div>

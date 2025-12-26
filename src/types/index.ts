@@ -6,11 +6,14 @@ export interface SlideData {
 }
 
 export interface Meeting {
-  id: string; // or number, keeping basic for now
+  id: number;
   title: string;
+  subtitle?: string;
   image: string;
-  date: string;
   location: string;
-  price: number;
+  price: string; // Formatting as string for display convenience '50,000원'
   tags: string[];
+  time?: string;
+  ageGroup?: string;
+  company?: string;
 }

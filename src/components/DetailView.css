@@ -39,20 +39,6 @@
   transform: scale(1.01); /* Extra assurance */
 }
 
-.location-badge {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  line-height: 1.5; /* Reset line-height from parent's 0 */
-  backdrop-filter: blur(4px);
-  z-index: 2; /* Ensure above image */
-}
-
 .info-section {
   display: flex;
   flex-direction: column;

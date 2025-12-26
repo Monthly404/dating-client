@@ -4,7 +4,7 @@ import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
 import SEO from "./common/SEO";
 import "./MainView.css";
-import { HERO_SLIDES } from "../constants";
+import { HERO_SLIDES, MEETINGS } from "../constants";
 
 const MainView: React.FC = () => {
   const navigate = useNavigate();
@@ -18,9 +18,8 @@ const MainView: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleCardClick = () => {
-    // In a real app, we would pass the meeting ID here
-    navigate("/meeting/1");
+  const handleCardClick = (id: number) => {
+    navigate(`/meeting/${id}`);
   };
 
   return (
@@ -89,12 +88,13 @@ const MainView: React.FC = () => {
               </div>
             ) : (
               <div className="meeting-grid">
-                <MeetingCard onClick={handleCardClick} />
-                <MeetingCard onClick={handleCardClick} />
-                <MeetingCard onClick={handleCardClick} />
-                <MeetingCard onClick={handleCardClick} />
-                <MeetingCard onClick={handleCardClick} />
-                <MeetingCard onClick={handleCardClick} />
+                {MEETINGS.map((meeting) => (
+                  <MeetingCard
+                    key={meeting.id}
+                    meeting={meeting}
+                    onClick={() => handleCardClick(meeting.id)}
+                  />
+                ))}
               </div>
             )}
           </div>
