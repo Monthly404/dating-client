@@ -3,30 +3,7 @@ import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
 import "./MainView.css";
-import heroParty from "../assets/hero_party.png";
-import heroHiking from "../assets/hero_hiking.png";
-import heroCoffee from "../assets/hero_coffee.png";
-
-const heroSlides = [
-  {
-    id: 1,
-    image: heroParty,
-    title: "이번 주말, \n루프탑 파티 어때요?",
-    subtitle: "설레는 만남이 기다리고 있어요",
-  },
-  {
-    id: 2,
-    image: heroHiking,
-    title: "가을 바람 맞으며 \n함께 떠나는 등산",
-    subtitle: "건강한 취미를 함께해요",
-  },
-  {
-    id: 3,
-    image: heroCoffee,
-    title: "따뜻한 카페에서 \n소소한 대화",
-    subtitle: "부담 없는 커피 모임",
-  },
-];
+import { HERO_SLIDES } from "../constants";
 
 const MainView: React.FC = () => {
   const navigate = useNavigate();
@@ -35,7 +12,7 @@ const MainView: React.FC = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 5000);
     return () => clearInterval(timer);
   }, []);
@@ -51,7 +28,7 @@ const MainView: React.FC = () => {
         <section className="hero-section">
           <h2>지금 뜨는 인기 모임</h2>
           <div className="hero-carousel">
-            {heroSlides.map((slide, index) => (
+            {HERO_SLIDES.map((slide, index) => (
               <div
                 key={slide.id}
                 className={`hero-slide ${
@@ -67,7 +44,7 @@ const MainView: React.FC = () => {
             ))}
 
             <div className="carousel-dots">
-              {heroSlides.map((_, index) => (
+              {HERO_SLIDES.map((_, index) => (
                 <button
                   key={index}
                   className={`dot ${index === currentSlide ? "active" : ""}`}

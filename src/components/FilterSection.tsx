@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./FilterSection.css";
-
-const seoulDistricts = [
-  "강남구",
-  "서초구",
-  "송파구",
-  "마포구",
-  "용산구",
-  "성동구",
-  "종로구",
-  "중구",
-  "영등포구",
-  "광진구",
-  "강서구",
-  "서대문구",
-  "기타",
-];
+import {
+  SEOUL_DISTRICTS,
+  DAYS_OF_WEEK,
+  TIME_SLOTS,
+  AGE_GROUPS,
+  MEETING_CONCEPTS,
+} from "../constants";
+import { ChipGroup } from "./common/ChipGroup";
 
 const FilterSection: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -69,6 +61,15 @@ const FilterSection: React.FC = () => {
     }
   };
 
+  const handleToggle =
+    (
+      state: string[],
+      setState: React.Dispatch<React.SetStateAction<string[]>>
+    ) =>
+    (item: string) => {
+      toggleSelection(state, setState, item);
+    };
+
   return (
     <>
       {/* Mobile Trigger Button */}
@@ -118,7 +119,7 @@ const FilterSection: React.FC = () => {
           <div className="filter-group">
             <h4>지역</h4>
             <div className="district-grid">
-              {seoulDistricts.map((district) => (
+              {SEOUL_DISTRICTS.map((district) => (
                 <button
                   key={district}
                   className={`district-btn ${
@@ -142,7 +143,7 @@ const FilterSection: React.FC = () => {
           <div className="filter-group">
             <h4>요일</h4>
             <div className="day-toggles">
-              {["월", "화", "수", "목", "금", "토", "일"].map((day) => (
+              {DAYS_OF_WEEK.map((day) => (
                 <button
                   key={day}
                   className={`day-btn ${
@@ -161,41 +162,21 @@ const FilterSection: React.FC = () => {
           {/* 4. Time */}
           <div className="filter-group">
             <h4>시간대</h4>
-            <div className="chip-container">
-              {["오전", "오후", "저녁"].map((time) => (
-                <button
-                  key={time}
-                  className={`chip-btn ${
-                    selectedTimes.includes(time) ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    toggleSelection(selectedTimes, setSelectedTimes, time)
-                  }
-                >
-                  {time}
-                </button>
-              ))}
-            </div>
+            <ChipGroup
+              items={TIME_SLOTS}
+              selectedItems={selectedTimes}
+              onToggle={handleToggle(selectedTimes, setSelectedTimes)}
+            />
           </div>
 
           {/* 5. Age */}
           <div className="filter-group">
             <h4>연령대</h4>
-            <div className="chip-container">
-              {["20대", "30대"].map((age) => (
-                <button
-                  key={age}
-                  className={`chip-btn ${
-                    selectedAges.includes(age) ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    toggleSelection(selectedAges, setSelectedAges, age)
-                  }
-                >
-                  {age}
-                </button>
-              ))}
-            </div>
+            <ChipGroup
+              items={AGE_GROUPS}
+              selectedItems={selectedAges}
+              onToggle={handleToggle(selectedAges, setSelectedAges)}
+            />
           </div>
 
           {/* 6. Price */}
@@ -247,32 +228,11 @@ const FilterSection: React.FC = () => {
           {/* 8. Other (Concepts) */}
           <div className="filter-group">
             <h4>기타</h4>
-            <div className="chip-container">
-              {[
-                "솔로지옥",
-                "환승연애",
-                "블라인드",
-                "애프터파티",
-                "음주",
-                "온라인",
-              ].map((concept) => (
-                <button
-                  key={concept}
-                  className={`chip-btn ${
-                    selectedConcepts.includes(concept) ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    toggleSelection(
-                      selectedConcepts,
-                      setSelectedConcepts,
-                      concept
-                    )
-                  }
-                >
-                  {concept}
-                </button>
-              ))}
-            </div>
+            <ChipGroup
+              items={MEETING_CONCEPTS}
+              selectedItems={selectedConcepts}
+              onToggle={handleToggle(selectedConcepts, setSelectedConcepts)}
+            />
           </div>
 
           {/* Removed 'Done' button as per request */}

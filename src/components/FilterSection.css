@@ -245,33 +245,8 @@
   font-weight: bold;
 }
 
-/* Chip Buttons (Time, Age, Concept) */
-.chip-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.chip-btn {
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--color-border);
-  background: white;
-  color: var(--color-secondary);
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.chip-btn:hover {
-  background: var(--color-bg);
-}
-
-.chip-btn.active {
-  background: var(--color-accent);
-  color: white;
-  border-color: var(--color-accent);
-}
+/* Chip Buttons (Time, Age, Concept) style moved to ChipGroup.css */
+/* .chip-container, .chip-btn removed */
 
 /* Price Slider */
 .price-header {
