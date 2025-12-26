@@ -11,7 +11,6 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ onClick }) => {
     <div className="meeting-card" onClick={onClick}>
       <div className="card-image-wrapper">
         <img src={meetingImg} alt="Meeting" className="card-image" />
-        <div className="card-badge">D-3</div>
       </div>
 
       <div className="card-content">

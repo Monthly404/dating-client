@@ -26,12 +26,17 @@
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-md);
+  background-color: transparent; /* Ensure no dark background shows */
+  font-size: 0; /* Remove inline whitespace */
+  line-height: 0;
 }
 
 .detail-image {
-  width: 100%;
+  width: 101%; /* Scale up slightly to cover edges */
   height: auto;
-  display: block;
+  display: block; /* Remove list item gap */
+  margin-left: -0.5%; /* Center the scaled image */
+  transform: scale(1.01); /* Extra assurance */
 }
 
 .location-badge {
@@ -43,7 +48,9 @@
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.8rem;
+  line-height: 1.5; /* Reset line-height from parent's 0 */
   backdrop-filter: blur(4px);
+  z-index: 2; /* Ensure above image */
 }
 
 .info-section {

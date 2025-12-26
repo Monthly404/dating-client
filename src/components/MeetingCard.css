@@ -18,16 +18,21 @@
   position: relative;
   width: 100%;
   padding-top: 66%; /* 3:2 Aspect Ratio */
-  background-color: var(--color-bg);
+  background: transparent; /* No background color to bleed through */
+  overflow: hidden;
+  font-size: 0; /* Kill whitespace */
+  line-height: 0;
 }
 
 .card-image {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: -0.5%; /* Overlap top */
+  left: -0.5%; /* Overlap left */
+  width: 101%; /* Overlap right */
+  height: 101%; /* Overlap bottom */
   object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
 }
 
 .card-badge {

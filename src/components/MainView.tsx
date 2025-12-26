@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
+import SEO from "./common/SEO";
 import "./MainView.css";
 import { HERO_SLIDES } from "../constants";
 
@@ -24,6 +25,7 @@ const MainView: React.FC = () => {
 
   return (
     <div className="main-view">
+      <SEO /> {/* Default SEO for Main Page */}
       <div className="container">
         <section className="hero-section">
           <h2>지금 뜨는 인기 모임</h2>

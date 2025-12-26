@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./DetailView.css";
 import meetingImg from "../assets/meeting_wine.png";
+import SEO from "./common/SEO";
 
 const DetailView: React.FC = () => {
   // Scroll to top when DetailView mounts
@@ -10,6 +11,11 @@ const DetailView: React.FC = () => {
 
   return (
     <div className="detail-page">
+      <SEO
+        title="프리미엄 와인과 함께하는 금요 파티"
+        description="와인소셜클럽에서 주최하는 2030 직장인 네트워킹 파티입니다. 서울 강남구에서 진행됩니다."
+        image={meetingImg} // In real app, use full URL
+      />
       <div className="detail-container">
         <div className="detail-grid">
           {/* Left: Visuals */}
