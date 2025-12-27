@@ -1,18 +1,19 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 
 :root {
-  /* Premium Palette */
-  --color-primary: #222222; /* Deep Black for text */
-  --color-secondary: #717171; /* Soft Gray for meta text */
-  --color-accent: #ff385c; /* Airbnb/Tinder-like vibrant pink/red */
-  --color-bg: #f8f9fa; /* Light gray background for contrast */
-  --color-surface: #ffffff; /* Pure white for cards */
-  --color-border: #edd6d6; /* Very subtle border */
+  /* Premium Palette - Refined */
+  --color-primary: #171719; /* Deeper, richer black */
+  --color-secondary: #767676; /* Neutral clean gray */
+  --color-tertiary: #999999; /* Light gray for subtle meta */
+  --color-accent: #ff385c; /* Primary Brand Color */
+  --color-bg: #f5f6f8; /* Cool neutral background */
+  --color-surface: #ffffff; /* Pure white */
+  --color-border: #eaecee; /* Clean, cool gray border */
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  /* Shadows - Softer & Diffused */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.08);
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -20,13 +21,16 @@
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 40px;
+  --spacing-xxl: 80px;
 
   /* Radius */
   --radius-sm: 8px;
-  --radius-md: 12px;
+  --radius-md: 16px; /* Increased for modern feel */
   --radius-lg: 24px;
+
   /* Layout */
   --container-width: 1140px;
+  --header-height: 64px;
 }
 
 .container {
@@ -38,13 +42,13 @@
 
 body {
   margin: 0;
-  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
-    Roboto, sans-serif;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   color: var(--color-primary);
   background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 * {
@@ -59,7 +63,8 @@ h5,
 h6 {
   margin: 0;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em; /* Tighter letter spacing for headings */
+  color: var(--color-primary);
 }
 
 button {
@@ -67,9 +72,26 @@ button {
   border: none;
   background: none;
   font-family: inherit;
+  padding: 0;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+  transition: color 0.2s;
+}
+
+/* Scrollbar aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #dbdbdb;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bababa;
 }

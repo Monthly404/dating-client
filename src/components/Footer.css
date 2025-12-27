@@ -1,42 +1,56 @@
 .app-footer {
   background-color: var(--color-surface);
-  border-top: 1px solid rgba(0, 0, 0, 0.05); /* Match Header border */
-  padding-top: var(--spacing-xl);
-  padding-bottom: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xxl) 0; /* More Vertical padding */
   margin-top: auto;
 }
 
 .footer-content {
-  width: 100%;
-  max-width: var(--container-width);
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
+  color: var(--color-secondary);
+  font-size: 0.9rem;
 }
 
 .footer-links {
   display: flex;
   gap: var(--spacing-lg);
-  margin: 0; /* Remove bottom margin */
+  flex-wrap: wrap; /* Safety for small screens */
+  justify-content: center;
 }
 
 .footer-links a {
-  text-decoration: none;
-  font-size: 0.85rem;
   color: var(--color-secondary);
+  font-weight: 500;
   transition: color 0.2s;
 }
 
 .footer-links a:hover {
   color: var(--color-primary);
+  text-decoration: underline;
 }
 
 .copyright {
-  font-size: 0.75rem;
-  color: #999;
-  margin: 0;
+  color: var(--color-tertiary);
+  font-size: 0.85rem;
+}
+
+/* Tablet & Desktop */
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-links {
+    order: 2; /* Put links in middle or right? Usually logo left, links right/center. */
+  }
+
+  .copyright {
+    order: 3; /* Wait, if Space-between, we have 3 items: Logo, Links, Copyright. */
+    /* Let's keep simple space-between */
+  }
 }

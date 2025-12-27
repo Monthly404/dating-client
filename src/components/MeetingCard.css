@@ -2,38 +2,39 @@
   background: var(--color-surface);
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm); /* Softer initial shadow */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  border: 1px solid transparent; /* Prepare for border transition */
 }
 
 .meeting-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px); /* Subtle lift */
   box-shadow: var(--shadow-md);
+  border-color: rgba(0, 0, 0, 0.04);
 }
 
 .card-image-wrapper {
   position: relative;
   width: 100%;
   padding-top: 66%; /* 3:2 Aspect Ratio */
-  background: transparent; /* No background color to bleed through */
+  background: var(--color-bg);
   overflow: hidden;
-  font-size: 0; /* Kill whitespace */
-  line-height: 0;
 }
 
 .card-image {
   position: absolute;
-  top: -0.5%; /* Overlap top */
-  left: -0.5%; /* Overlap left */
-  width: 101%; /* Overlap right */
-  height: 101%; /* Overlap bottom */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  display: block;
-  transition: transform 0.5s ease;
+  /* Removed zoom transition */
 }
+
+/* Removed hover zoom effect */
 
 .card-badge {
   position: absolute;
@@ -42,47 +43,56 @@
   background-color: var(--color-accent);
   color: white;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 700;
+  z-index: 1;
 }
 
 .card-content {
-  padding: var(--spacing-md);
+  padding: 20px; /* Slightly more padding */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .card-meta {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--color-secondary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  font-weight: 500;
 }
 
 .card-title {
-  font-size: 1.1rem;
+  font-size: 1.15rem; /* Larger title */
   margin-bottom: 8px;
   color: var(--color-primary);
   line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 
 .card-price {
   font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 12px;
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+  color: var(--color-primary);
 }
 
 .card-tags {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  margin-top: auto; /* Push tags to bottom */
 }
 
 .card-tags span {
   font-size: 0.75rem;
   color: var(--color-secondary);
   background-color: var(--color-bg);
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 500;
 }

@@ -27,7 +27,6 @@
 .ds-button.variant-primary:not(:disabled):hover {
   filter: brightness(1.05);
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
 }
 
 .ds-button.variant-secondary {

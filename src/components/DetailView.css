@@ -1,15 +1,17 @@
 .detail-page {
-  background-color: var(--color-bg); /* Match MainView background */
+  background-color: var(--color-bg);
   min-height: 100vh;
-  padding-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-xxl); /* More bottom spacing */
 }
 
+/* Note: .detail-card class is managed via DetailView.tsx using Container but preserving card look */
 .detail-card {
-  background-color: var(--color-surface); /* Card look */
-  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg); /* Larger radius */
   box-shadow: var(--shadow-sm);
-  padding: var(--spacing-xl); /* Increased padding for inner content */
-  margin-top: var(--spacing-md);
+  padding: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
+  border: 1px solid var(--color-border);
 }
 
 .detail-grid {
@@ -24,22 +26,20 @@
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  background-color: transparent; /* Ensure no dark background shows */
-  font-size: 0; /* Remove inline whitespace */
-  line-height: 0;
+  aspect-ratio: 4/3; /* Enforce attractive Aspect Ratio for detail */
 }
 
 .detail-image {
-  width: 101%; /* Scale up slightly to cover edges */
-  height: auto;
-  display: block; /* Remove list item gap */
-  margin-left: -0.5%; /* Center the scaled image */
-  transform: scale(1.01); /* Extra assurance */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .info-section {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .info-header {
@@ -50,24 +50,29 @@
 
 .info-category {
   color: var(--color-accent);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.95rem;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .info-title {
-  font-size: 1.8rem;
-  line-height: 1.3;
-  margin-bottom: 12px;
+  font-size: 2.2rem; /* Much larger for impact */
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--color-primary);
 }
 
 .info-price {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-primary);
 }
 
 .info-body {
@@ -76,18 +81,21 @@
 
 .info-row {
   display: flex;
-  margin-bottom: 12px;
-  font-size: 1rem;
+  margin-bottom: 16px; /* Increased spacing */
+  font-size: 1.05rem;
+  align-items: center;
 }
 
 .info-row .label {
-  width: 80px;
+  width: 100px; /* Fixed width for alignment */
   color: var(--color-secondary);
+  font-weight: 500;
 }
 
 .info-row .value {
   flex: 1;
   color: var(--color-primary);
+  font-weight: 500;
 }
 
 .tags-container {
@@ -99,16 +107,18 @@
 
 .map-section h3 {
   margin-bottom: var(--spacing-md);
+  font-size: 1.4rem;
 }
 
 .map-placeholder {
   background-color: var(--color-bg);
-  height: 240px;
+  height: 320px; /* Taller map */
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-secondary);
+  border: 1px solid var(--color-border);
 }
 
 @media (min-width: 768px) {

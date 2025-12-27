@@ -1,14 +1,17 @@
 .app-header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  height: 60px;
+  z-index: 1000; /* Ensure it stays on top */
+  background-color: rgba(255, 255, 255, 0.85); /* Slightly more transparent */
+  backdrop-filter: blur(16px); /* Stronger blur for premium feel */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  height: var(--header-height);
   display: flex;
   align-items: center;
+  transition: all 0.3s ease;
 }
+
+/* Optional: Add shadow on scroll if we added JS state, but for now border is fine */
 
 .header-inner {
   height: 100%;
@@ -18,10 +21,11 @@
 }
 
 .logo {
-  font-size: 1.25rem;
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.4rem; /* Slightly larger */
   color: var(--color-accent);
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.03em;
   text-decoration: none;
   cursor: pointer;
 }
