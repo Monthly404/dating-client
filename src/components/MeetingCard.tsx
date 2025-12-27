@@ -12,12 +12,19 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
     <div className="meeting-card" onClick={onClick}>
       <div className="card-image-wrapper">
         <img src={meeting.image} alt={meeting.title} className="card-image" />
+        <div className="card-location-overlay">{meeting.location}</div>
       </div>
 
       <div className="card-content">
-        <div className="card-meta">{meeting.location}</div>
         <h3 className="card-title">{meeting.title}</h3>
-        <div className="card-price">{meeting.price}</div>
+
+        <div className="card-date">
+          {meeting.isOneTime
+            ? meeting.oneTimeDate
+            : `매주 ${meeting.regularDays?.join(", ")}`}
+        </div>
+
+        <div className="card-price">{meeting.price} ~</div>
         <div className="card-tags">
           {meeting.tags.map((tag, index) => (
             <span key={index}>{tag}</span>

@@ -16,4 +16,7 @@ export interface Meeting {
   time?: string;
   ageGroup?: string;
   company?: string;
+  isOneTime: boolean;
+  oneTimeDate?: string; // For one-time meetings: "12.24(토)"
+  regularDays?: string[]; // For regular meetings: ["토", "일"]
 }

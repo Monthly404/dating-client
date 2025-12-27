@@ -36,11 +36,24 @@ const FilterSection: React.FC = () => {
   }, [isOpen]);
 
   // States
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(d.getDate()).padStart(2, "0")}`;
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(d.getDate()).padStart(2, "0")}`;
+  });
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState(50000);
+  const [priceRange, setPriceRange] = useState(100000);
 
   // New States
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
@@ -185,22 +198,22 @@ const FilterSection: React.FC = () => {
               <h4>가격대</h4>
               <span className="price-value">
                 {priceRange === 100000
-                  ? "10만원 이상"
-                  : `${priceRange.toLocaleString()}원`}
+                  ? "전체"
+                  : `${priceRange / 10000}만원 이하`}
               </span>
             </div>
             <input
               type="range"
-              min="1000"
+              min="10000"
               max="100000"
-              step="1000"
+              step="10000"
               value={priceRange}
               onChange={(e) => setPriceRange(Number(e.target.value))}
               className="price-slider"
             />
             <div className="price-labels">
-              <span>1천원</span>
-              <span>10만원~</span>
+              <span>1만원</span>
+              <span>전체</span>
             </div>
           </div>
 
