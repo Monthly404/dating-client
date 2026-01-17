@@ -464,7 +464,7 @@ Content-Type: application/json
       "maxPrice": 100000
     }
   ],
-  "page": 0,
+  "page": 1,
   "size": 10
 }
 ```
@@ -477,7 +477,7 @@ Content-Type: application/json
 
 {
   "filters": null,
-  "page": 0,
+  "page": 1,
   "size": 20
 }
 ```
@@ -490,7 +490,7 @@ Content-Type: application/json
 
 {
   "filters": [],
-  "page": 0,
+  "page": 1,
   "size": 20
 }
 ```
@@ -514,7 +514,7 @@ Content-Type: application/json
       "ageGroups": ["TWENTIES", "THIRTIES"]
     }
   ],
-  "page": 0,
+  "page": 1,
   "size": 10
 }
 ```

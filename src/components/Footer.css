@@ -1,24 +1,47 @@
 .app-footer {
   background-color: var(--color-surface);
   border-top: 1px solid var(--color-border);
-  padding: var(--spacing-xxl) 0; /* More Vertical padding */
+  padding: var(--spacing-xxl) 0;
   margin-top: auto;
 }
 
 .footer-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xl);
   color: var(--color-secondary);
   font-size: 0.9rem;
 }
 
+/* 브랜드 섹션 */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.footer-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  transition: color 0.2s;
+}
+
+.footer-logo:hover {
+  color: var(--color-accent);
+}
+
+.footer-copyright {
+  color: var(--color-tertiary);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* 링크 섹션 */
 .footer-links {
   display: flex;
-  gap: var(--spacing-lg);
-  flex-wrap: wrap; /* Safety for small screens */
-  justify-content: center;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
 .footer-links a {
@@ -32,25 +55,16 @@
   text-decoration: underline;
 }
 
-.copyright {
-  color: var(--color-tertiary);
-  font-size: 0.85rem;
-}
-
-/* Tablet & Desktop */
+/* 태블릿 & 데스크톱 */
 @media (min-width: 768px) {
   .footer-content {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .footer-links {
-    order: 2; /* Put links in middle or right? Usually logo left, links right/center. */
-  }
-
-  .copyright {
-    order: 3; /* Wait, if Space-between, we have 3 items: Logo, Links, Copyright. */
-    /* Let's keep simple space-between */
+    flex-direction: row;
+    gap: var(--spacing-xl);
   }
 }
