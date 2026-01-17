@@ -64,7 +64,9 @@ const DetailView: React.FC = () => {
               <div className="info-body">
                 <div className="info-row">
                   <span className="label">업체명</span>
-                  <span className="value">{meeting.company || "소개팅각"}</span>
+                  <span className="value">
+                    {meeting.company || "소개팅.zip"}
+                  </span>
                 </div>
                 <div className="info-row">
                   <span className="label">일시</span>

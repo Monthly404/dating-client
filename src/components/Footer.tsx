@@ -7,15 +7,15 @@ const Footer: React.FC = () => {
   return (
     <footer className="app-footer">
       <Container className="footer-content">
-        <Link to="/" className="logo" style={{ fontSize: "1.2rem" }}>
-          소개팅 각
-        </Link>
+        <div className="footer-brand-section">
+          <p className="footer-brand">소개팅.zip</p>
+          <p className="footer-text">© 2026 소개팅.zip. All rights reserved.</p>
+        </div>
         <div className="footer-links">
           <Link to="/about">서비스 소개</Link>
           <Link to="/terms">이용약관</Link>
           <Link to="/privacy">개인정보처리방침</Link>
         </div>
-        <div className="copyright">© 2025 Monthly404. All rights reserved.</div>
       </Container>
     </footer>
   );

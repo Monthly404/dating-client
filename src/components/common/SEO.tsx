@@ -8,12 +8,12 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = "소개팅 각",
-  description = "내가 원하는 소개팅을, 늦지 않게 발견하세요. 프리미엄 오프라인 소개팅 큐레이션 플랫폼",
+  title = "소개팅.zip",
+  description = "서울 지역 오프라인 소개팅 이벤트를 한눈에! 조건별 필터로 맞춤 모임을 찾아보세요. 소개팅.zip",
   image = "/og-image.png",
   url = window.location.href,
 }) => {
-  const fullTitle = title === "소개팅 각" ? title : `${title} | 소개팅 각`;
+  const fullTitle = title === "소개팅.zip" ? title : `${title} | 소개팅.zip`;
 
   useEffect(() => {
     // Update Title
