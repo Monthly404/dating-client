@@ -8,10 +8,22 @@ interface MeetingCardProps {
 }
 
 const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
+  /** 이미지 로드 실패 시 폴백 이미지로 대체 */
+  const handleImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    e.currentTarget.src = "/fallback-image.png";
+  };
+
   return (
     <div className="meeting-card" onClick={onClick}>
       <div className="card-image-wrapper">
-        <img src={meeting.image} alt={meeting.title} className="card-image" />
+        <img
+          src={meeting.image || "/fallback-image.png"}
+          alt={meeting.title}
+          className="card-image"
+          onError={handleImageError}
+        />
         <div className="card-location-overlay">{meeting.location}</div>
       </div>
 

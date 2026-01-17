@@ -11,7 +11,14 @@ const DetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const meeting = MEETINGS.find((m) => m.id === Number(id));
 
-  // Scroll to top when DetailView mounts
+  /** 이미지 로드 실패 시 폴백 이미지로 대체 */
+  const handleImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    e.currentTarget.src = "/fallback-image.png";
+  };
+
+  // 페이지 로드 시 최상단으로 스크롤
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -40,13 +47,13 @@ const DetailView: React.FC = () => {
       <Container>
         <div className="detail-card">
           <div className="detail-grid">
-            {/* Left: Visuals */}
             <div className="visual-section">
               <div className="detail-image-wrapper">
                 <img
-                  src={meeting.image}
+                  src={meeting.image || "/fallback-image.png"}
                   alt={meeting.title}
                   className="detail-image"
+                  onError={handleImageError}
                 />
               </div>
             </div>

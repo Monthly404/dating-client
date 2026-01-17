@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
+import EmptyState from "./common/EmptyState";
 import SEO from "./common/SEO";
 import { Container } from "./common/Container";
 import { Select } from "./common/Select";
@@ -274,15 +275,7 @@ const MainView: React.FC = () => {
                     />
                   ))
                 ) : (
-                  <div
-                    style={{
-                      padding: "20px",
-                      textAlign: "center",
-                      color: "#666",
-                    }}
-                  >
-                    조건에 맞는 모임이 없습니다.
-                  </div>
+                  <EmptyState />
                 )}
               </div>
             )}
