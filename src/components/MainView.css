@@ -18,12 +18,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .section-header h2 {
   font-size: 1.5rem;
-  margin-bottom: 0; /* Remove margin for perfect alignment */
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .hero-carousel {

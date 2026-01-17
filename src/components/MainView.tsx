@@ -263,17 +263,27 @@ const MainView: React.FC = () => {
               </div>
             ) : (
               // 목록 뷰
-              <div className="meeting-grid">
+              <div style={{ flex: 1, width: "100%" }}>
                 {isLoading ? (
-                  <div>Loading...</div>
+                  <div
+                    style={{
+                      padding: "40px",
+                      textAlign: "center",
+                      color: "var(--color-secondary)",
+                    }}
+                  >
+                    목록을 불러오는 중입니다...
+                  </div>
                 ) : meetings.length > 0 ? (
-                  meetings.map((meeting) => (
-                    <MeetingCard
-                      key={meeting.id}
-                      meeting={meeting}
-                      onClick={() => handleCardClick(meeting.id)}
-                    />
-                  ))
+                  <div className="meeting-grid">
+                    {meetings.map((meeting) => (
+                      <MeetingCard
+                        key={meeting.id}
+                        meeting={meeting}
+                        onClick={() => handleCardClick(meeting.id)}
+                      />
+                    ))}
+                  </div>
                 ) : (
                   <EmptyState />
                 )}
