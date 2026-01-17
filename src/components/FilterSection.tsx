@@ -8,11 +8,142 @@ import {
   MEETING_CONCEPTS,
 } from "../constants";
 import { ChipGroup } from "./common/ChipGroup";
+import type {
+  DatingFilterParam,
+  DayOfWeek,
+  TimeRange,
+  AgeGroup,
+} from "../types/dating";
 
-const FilterSection: React.FC = () => {
+interface FilterSectionProps {
+  /** 필터 적용 시 호출되는 콜백 */
+  onApply: (filters: DatingFilterParam[]) => void;
+}
+
+/** 한글 요일 → 영문 요일 Enum 변환 맵 */
+const DAY_MAP: Record<string, DayOfWeek> = {
+  월: "MONDAY",
+  화: "TUESDAY",
+  수: "WEDNESDAY",
+  목: "THURSDAY",
+  금: "FRIDAY",
+  토: "SATURDAY",
+  일: "SUNDAY",
+};
+
+/** 한글 시간대 → 영문 시간대 Enum 변환 맵 */
+const TIME_MAP: Record<string, TimeRange> = {
+  오전: "MORNING",
+  오후: "AFTERNOON",
+  저녁: "EVENING",
+};
+
+/** 한글 연령대 → 영문 연령대 Enum 변환 맵 */
+const AGE_MAP: Record<string, AgeGroup> = {
+  "20대": "TWENTIES",
+  "30대": "THIRTIES",
+};
+
+/** 운영 주체 옵션 */
+const ORGANIZER_TYPES = ["전체", "지자체", "사설"] as const;
+
+/** 가격 슬라이더 최소값 */
+const PRICE_MIN = 10000;
+
+/** 가격 슬라이더 최대값 (전체) */
+const PRICE_MAX = 100000;
+
+/** 가격 슬라이더 단위 */
+const PRICE_STEP = 10000;
+
+/** 데스크톱 브레이크포인트 */
+const DESKTOP_BREAKPOINT = 768;
+
+/**
+ * 오늘 날짜를 YYYY-MM-DD 형식으로 반환
+ */
+const getTodayString = (): string => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(d.getDate()).padStart(2, "0")}`;
+};
+
+/**
+ * 1개월 후 날짜를 YYYY-MM-DD 형식으로 반환
+ */
+const getOneMonthLaterString = (): string => {
+  const d = new Date();
+  d.setMonth(d.getMonth() + 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(d.getDate()).padStart(2, "0")}`;
+};
+
+const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
+  /** 모바일에서 필터 모달 열림 여부 */
   const [isOpen, setIsOpen] = useState(false);
 
-  // Prevent background scrolling when modal is open (Mobile only)
+  /** 날짜 필터 - 시작일 */
+  const [startDate, setStartDate] = useState(getTodayString);
+
+  /** 날짜 필터 - 종료일 */
+  const [endDate, setEndDate] = useState(getOneMonthLaterString);
+
+  /** 날짜가 사용자에 의해 수정되었는지 여부 */
+  const [dateModified, setDateModified] = useState(false);
+
+  /** 지역 필터 - 선택된 구 목록 */
+  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
+
+  /** 요일 필터 - 선택된 요일 목록 */
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+
+  /** 시간대 필터 - 선택된 시간대 목록 */
+  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+
+  /** 연령대 필터 - 선택된 연령대 목록 */
+  const [selectedAges, setSelectedAges] = useState<string[]>([]);
+
+  /** 가격 필터 - 최대 가격 (100000 = 전체) */
+  const [priceRange, setPriceRange] = useState(PRICE_MAX);
+
+  /** 운영 주체 필터 - 선택된 운영 주체 ("" = 전체) */
+  const [selectedType, setSelectedType] = useState<string>("");
+
+  /** 기타 컨셉 필터 - 선택된 컨셉 목록 */
+  const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
+
+  /** 필터가 초기 상태에서 변경되었는지 여부 */
+  const [hasChanges, setHasChanges] = useState(false);
+
+  /** 필터 변경 여부 감지 */
+  useEffect(() => {
+    const changed =
+      dateModified ||
+      selectedDistricts.length > 0 ||
+      selectedDays.length > 0 ||
+      selectedTimes.length > 0 ||
+      selectedAges.length > 0 ||
+      priceRange < PRICE_MAX ||
+      selectedType !== "" ||
+      selectedConcepts.length > 0;
+
+    setHasChanges(changed);
+  }, [
+    dateModified,
+    selectedDistricts,
+    selectedDays,
+    selectedTimes,
+    selectedAges,
+    priceRange,
+    selectedType,
+    selectedConcepts,
+  ]);
+
+  /** 모바일 모달 열릴 때 배경 스크롤 방지 */
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -24,10 +155,10 @@ const FilterSection: React.FC = () => {
     };
   }, [isOpen]);
 
-  // Reset modal state on resize to desktop
+  /** 화면 크기가 데스크톱으로 변경되면 모달 닫기 */
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768 && isOpen) {
+      if (window.innerWidth > DESKTOP_BREAKPOINT && isOpen) {
         setIsOpen(false);
       }
     };
@@ -35,33 +166,12 @@ const FilterSection: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [isOpen]);
 
-  // States
-  const [startDate, setStartDate] = useState(() => {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(d.getDate()).padStart(2, "0")}`;
-  });
-  const [endDate, setEndDate] = useState(() => {
-    const d = new Date();
-    d.setMonth(d.getMonth() + 1);
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(d.getDate()).padStart(2, "0")}`;
-  });
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState(100000);
-
-  // New States
-  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
-  const [selectedAges, setSelectedAges] = useState<string[]>([]);
-  const [selectedType, setSelectedType] = useState<string>("");
-  const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
-
-  // Helper Toggle Functions
+  /**
+   * 배열 타입 필터의 선택/해제 토글
+   * @param list 현재 선택된 항목 배열
+   * @param setList 상태 업데이트 함수
+   * @param item 토글할 항목
+   */
   const toggleSelection = (
     list: string[],
     setList: React.Dispatch<React.SetStateAction<string[]>>,
@@ -74,6 +184,12 @@ const FilterSection: React.FC = () => {
     }
   };
 
+  /**
+   * ChipGroup용 토글 핸들러 생성
+   * @param state 현재 상태
+   * @param setState 상태 업데이트 함수
+   * @returns 토글 핸들러 함수
+   */
   const handleToggle =
     (
       state: string[],
@@ -83,25 +199,129 @@ const FilterSection: React.FC = () => {
       toggleSelection(state, setState, item);
     };
 
+  /**
+   * 날짜 변경 핸들러
+   * @param setter 날짜 상태 setter
+   * @returns onChange 핸들러
+   */
+  const handleDateChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+      setDateModified(true);
+    };
+
+  /**
+   * 필터 적용 버튼 클릭 핸들러
+   * 현재 선택된 필터를 API 형식으로 변환하여 부모 컴포넌트에 전달
+   */
+  const handleApply = () => {
+    const filters: DatingFilterParam[] = [];
+
+    // 1. 날짜 필터 (사용자가 수정한 경우에만)
+    if (dateModified) {
+      filters.push({
+        type: "SCHEDULE_PERIOD",
+        startDate: startDate,
+        endDate: endDate,
+      });
+    }
+
+    // 2. 지역 필터 (서울 구 단위)
+    if (selectedDistricts.length > 0) {
+      selectedDistricts.forEach((district) => {
+        filters.push({
+          type: "DISTRICT",
+          sido: "서울특별시",
+          gugun: district,
+        });
+      });
+    }
+
+    // 3. 요일 필터
+    if (selectedDays.length > 0) {
+      const enumDays = selectedDays.map((d) => DAY_MAP[d]).filter(Boolean);
+      if (enumDays.length > 0) {
+        filters.push({
+          type: "DAYS",
+          days: enumDays,
+        });
+      }
+    }
+
+    // 4. 시간대 필터
+    if (selectedTimes.length > 0) {
+      const enumTimes = selectedTimes.map((t) => TIME_MAP[t]).filter(Boolean);
+      if (enumTimes.length > 0) {
+        filters.push({
+          type: "TIME_RANGE",
+          timeRanges: enumTimes,
+        });
+      }
+    }
+
+    // 5. 연령대 필터
+    if (selectedAges.length > 0) {
+      const enumAges = selectedAges.map((a) => AGE_MAP[a]).filter(Boolean);
+      if (enumAges.length > 0) {
+        filters.push({
+          type: "AGE_RANGE",
+          ageGroups: enumAges,
+        });
+      }
+    }
+
+    // 6. 가격 필터 (최대값보다 작은 경우에만)
+    if (priceRange < PRICE_MAX) {
+      filters.push({
+        type: "PRICE_RANGE",
+        maxPrice: priceRange,
+      });
+    }
+
+    // 7. 운영 주체 필터
+    if (selectedType) {
+      filters.push({
+        type: "ETC",
+        tagType: "ORGANIZER",
+        value: selectedType,
+      });
+    }
+
+    // 8. 컨셉 필터
+    selectedConcepts.forEach((concept) => {
+      filters.push({
+        type: "ETC",
+        tagType: "CONCEPT",
+        value: concept,
+      });
+    });
+
+    // 부모 컴포넌트로 필터 전달 및 모달 닫기
+    onApply(filters);
+    setIsOpen(false);
+  };
+
   return (
     <>
-      {/* Mobile Trigger Button */}
+      {/* 모바일: 필터 열기 버튼 */}
       <button className="mobile-filter-trigger" onClick={() => setIsOpen(true)}>
         <span className="filter-label">필터 설정</span>
       </button>
 
-      {/* Filter Section: Sidebar on Desktop, Modal on Mobile */}
+      {/* 필터 섹션 (데스크톱: 사이드바, 모바일: 모달) */}
       <aside className={`filter-section ${isOpen ? "is-open" : ""}`}>
+        {/* 헤더 */}
         <div className="filter-header">
           <h3>필터</h3>
-          {/* Close button for Mobile Modal */}
           <button className="close-filter-btn" onClick={() => setIsOpen(false)}>
             ✕
           </button>
         </div>
 
+        {/* 스크롤 가능한 필터 컨텐츠 영역 */}
         <div className="filter-content-scroll">
-          {/* 1. Date Range */}
+          {/* 1. 날짜 필터 */}
           <div className="filter-group">
             <h4>기간</h4>
             <div className="date-range-container">
@@ -111,7 +331,7 @@ const FilterSection: React.FC = () => {
                   className="filter-input-date"
                   placeholder="시작일"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
+                  onChange={handleDateChange(setStartDate)}
                 />
                 <span className="label-text">부터</span>
               </label>
@@ -121,14 +341,14 @@ const FilterSection: React.FC = () => {
                   className="filter-input-date"
                   placeholder="종료일"
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
+                  onChange={handleDateChange(setEndDate)}
                 />
                 <span className="label-text">까지</span>
               </label>
             </div>
           </div>
 
-          {/* 2. Region */}
+          {/* 2. 지역 필터 */}
           <div className="filter-group">
             <h4>지역</h4>
             <div className="district-grid">
@@ -152,7 +372,7 @@ const FilterSection: React.FC = () => {
             </div>
           </div>
 
-          {/* 3. Days */}
+          {/* 3. 요일 필터 */}
           <div className="filter-group">
             <h4>요일</h4>
             <div className="day-toggles">
@@ -172,7 +392,7 @@ const FilterSection: React.FC = () => {
             </div>
           </div>
 
-          {/* 4. Time */}
+          {/* 4. 시간대 필터 */}
           <div className="filter-group">
             <h4>시간대</h4>
             <ChipGroup
@@ -182,7 +402,7 @@ const FilterSection: React.FC = () => {
             />
           </div>
 
-          {/* 5. Age */}
+          {/* 5. 연령대 필터 */}
           <div className="filter-group">
             <h4>연령대</h4>
             <ChipGroup
@@ -192,21 +412,21 @@ const FilterSection: React.FC = () => {
             />
           </div>
 
-          {/* 6. Price */}
+          {/* 6. 가격 필터 */}
           <div className="filter-group">
             <div className="price-header">
               <h4>가격대</h4>
               <span className="price-value">
-                {priceRange === 100000
+                {priceRange === PRICE_MAX
                   ? "전체"
                   : `${priceRange / 10000}만원 이하`}
               </span>
             </div>
             <input
               type="range"
-              min="10000"
-              max="100000"
-              step="10000"
+              min={PRICE_MIN}
+              max={PRICE_MAX}
+              step={PRICE_STEP}
               value={priceRange}
               onChange={(e) => setPriceRange(Number(e.target.value))}
               className="price-slider"
@@ -217,11 +437,11 @@ const FilterSection: React.FC = () => {
             </div>
           </div>
 
-          {/* 7. Type */}
+          {/* 7. 운영 주체 필터 */}
           <div className="filter-group">
             <h4>운영 주체</h4>
             <div className="segment-control">
-              {["전체", "지자체", "사설"].map((type) => (
+              {ORGANIZER_TYPES.map((type) => (
                 <button
                   key={type}
                   className={`segment-btn ${
@@ -238,7 +458,7 @@ const FilterSection: React.FC = () => {
             </div>
           </div>
 
-          {/* 8. Other (Concepts) */}
+          {/* 8. 기타 컨셉 필터 */}
           <div className="filter-group">
             <h4>기타</h4>
             <ChipGroup
@@ -247,12 +467,21 @@ const FilterSection: React.FC = () => {
               onToggle={handleToggle(selectedConcepts, setSelectedConcepts)}
             />
           </div>
+        </div>
 
-          {/* Removed 'Done' button as per request */}
+        {/* Sticky Footer: 필터 적용 버튼 */}
+        <div className="filter-action-footer">
+          <button
+            className="apply-filter-btn"
+            onClick={handleApply}
+            disabled={!hasChanges}
+          >
+            필터 적용하기
+          </button>
         </div>
       </aside>
 
-      {/* Backdrop for mobile */}
+      {/* 모바일: 모달 배경 */}
       {isOpen && (
         <div className="filter-backdrop" onClick={() => setIsOpen(false)} />
       )}
