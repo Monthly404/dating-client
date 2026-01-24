@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./FilterSection.css";
 import {
   SEOUL_DISTRICTS,
@@ -132,9 +132,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
     selectedConcepts: [] as string[],
   });
 
-  /** 필터가 적용된 상태에서 변경되었는지 여부 */
-  const [hasChanges, setHasChanges] = useState(false);
-
   /** 배열 비교 헬퍼 함수 */
   const arraysEqual = (a: string[], b: string[]) => {
     if (a.length !== b.length) return false;
@@ -144,8 +141,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
   };
 
   /** 필터 변경 여부 감지 - 적용된 상태와 비교 */
-  useEffect(() => {
-    const changed =
+  const hasChanges = useMemo(() => {
+    return (
       dateModified !== appliedState.dateModified ||
       (dateModified &&
         (startDate !== appliedState.startDate ||
@@ -156,9 +153,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
       !arraysEqual(selectedAges, appliedState.selectedAges) ||
       priceRange !== appliedState.priceRange ||
       selectedType !== appliedState.selectedType ||
-      !arraysEqual(selectedConcepts, appliedState.selectedConcepts);
-
-    setHasChanges(changed);
+      !arraysEqual(selectedConcepts, appliedState.selectedConcepts)
+    );
   }, [
     dateModified,
     startDate,
