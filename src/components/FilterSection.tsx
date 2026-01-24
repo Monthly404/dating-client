@@ -36,12 +36,14 @@ const TIME_MAP: Record<string, TimeRange> = {
   오전: "MORNING",
   오후: "AFTERNOON",
   저녁: "EVENING",
+  밤: "NIGHT",
 };
 
 /** 한글 연령대 → 영문 연령대 Enum 변환 맵 */
 const AGE_MAP: Record<string, AgeGroup> = {
   "20대": "TWENTIES",
   "30대": "THIRTIES",
+  "40대 이상": "ELDER",
 };
 
 /** 운영 주체 옵션 */
@@ -66,7 +68,7 @@ const getTodayString = (): string => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
     2,
-    "0"
+    "0",
   )}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
@@ -78,7 +80,7 @@ const getOneMonthLaterString = (): string => {
   d.setMonth(d.getMonth() + 1);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
     2,
-    "0"
+    "0",
   )}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
@@ -175,7 +177,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
   const toggleSelection = (
     list: string[],
     setList: React.Dispatch<React.SetStateAction<string[]>>,
-    item: string
+    item: string,
   ) => {
     if (list.includes(item)) {
       setList(list.filter((i) => i !== item));
@@ -193,7 +195,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
   const handleToggle =
     (
       state: string[],
-      setState: React.Dispatch<React.SetStateAction<string[]>>
+      setState: React.Dispatch<React.SetStateAction<string[]>>,
     ) =>
     (item: string) => {
       toggleSelection(state, setState, item);
@@ -275,6 +277,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
     if (priceRange < PRICE_MAX) {
       filters.push({
         type: "PRICE_RANGE",
+        minPrice: 0,
         maxPrice: priceRange,
       });
     }
@@ -362,7 +365,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
                     toggleSelection(
                       selectedDistricts,
                       setSelectedDistricts,
-                      district
+                      district,
                     )
                   }
                 >

@@ -21,9 +21,9 @@ export const SEOUL_DISTRICTS = [
 
 export const DAYS_OF_WEEK = ["월", "화", "수", "목", "금", "토", "일"];
 
-export const TIME_SLOTS = ["오전", "오후", "저녁"];
+export const TIME_SLOTS = ["오전", "오후", "저녁", "밤"];
 
-export const AGE_GROUPS = ["20대", "30대"];
+export const AGE_GROUPS = ["20대", "30대", "40대 이상"];
 
 export const MEETING_CONCEPTS = [
   "애프터파티",

@@ -8,21 +8,12 @@ import { Container } from "./common/Container";
 import { Select } from "./common/Select";
 import "./MainView.css";
 import { HERO_SLIDES } from "../constants";
+import { DEFAULT_PAGE, DEFAULT_SIZE } from "../constants/search";
 import { useSearchDatingGroups } from "../queries/useDatingQueries";
 import type { DatingGroupResponse, DatingFilterParam } from "../types/dating";
 import type { Meeting } from "../types";
-import { DEFAULT_PAGE, DEFAULT_SIZE } from "../constants/search";
-
-/** 영문 요일을 한글로 변환하는 맵 */
-const DAY_MAP: Record<string, string> = {
-  MONDAY: "월",
-  TUESDAY: "화",
-  WEDNESDAY: "수",
-  THURSDAY: "목",
-  FRIDAY: "금",
-  SATURDAY: "토",
-  SUNDAY: "일",
-};
+import { DAY_MAP, formatDateTime, formatShortDate } from "../utils/dateFormat";
+import { formatPrice, formatTags } from "../utils/datingFormat";
 
 /** 정렬 옵션 */
 const SORT_OPTIONS = [
@@ -33,53 +24,6 @@ const SORT_OPTIONS = [
 
 /** 히어로 캐러셀 자동 전환 시간 (밀리초) */
 const CAROUSEL_INTERVAL = 5000;
-
-/**
- * Date 객체에서 요일 인덱스를 가져와 한글 요일로 변환
- * @param date Date 객체
- * @returns 한글 요일 (예: "월", "화")
- */
-const getKoreanDay = (date: Date): string => {
-  const dayIndex = date.getDay() === 0 ? 6 : date.getDay() - 1;
-  const dayKey = Object.keys(DAY_MAP)[dayIndex];
-  return DAY_MAP[dayKey] || "";
-};
-
-/**
- * Date 객체를 시간 문자열로 포맷 (예: "14:30")
- * @param date Date 객체
- * @returns 시간 문자열
- */
-const formatTime = (date: Date): string => {
-  const hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
-};
-
-/**
- * Date 객체를 "M월 D일 (요일) HH:MM" 형식으로 포맷
- * @param date Date 객체
- * @returns 포맷된 날짜/시간 문자열
- */
-const formatDateTime = (date: Date): string => {
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const koreanDay = getKoreanDay(date);
-  const time = formatTime(date);
-  return `${month}월 ${day}일 ${koreanDay} ${time}`;
-};
-
-/**
- * Date 객체를 "M.D(요일)" 형식으로 포맷
- * @param date Date 객체
- * @returns 포맷된 날짜 문자열 (예: "12.24(금)")
- */
-const formatShortDate = (date: Date): string => {
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const koreanDay = getKoreanDay(date);
-  return `${month}.${day}(${koreanDay})`;
-};
 
 /**
  * API에서 받은 DatingGroupResponse를 UI용 Meeting 타입으로 변환
@@ -121,8 +65,8 @@ const transformDatingGroupToMeeting = (
     subtitle: group.tags?.map((t) => t.value).join(", ") || "",
     image: group.thumbnail || "",
     location: group.address?.gugun || "",
-    price: group.price ? `${group.price.toLocaleString()}원` : "무료",
-    tags: group.tags?.map((t) => `#${t.value}`) || [],
+    price: formatPrice(group.price),
+    tags: formatTags(group),
     time: timeStr,
     ageGroup: group.ageRange ? `${group.ageRange[0]}~${group.ageRange[1]}` : "",
     company: "",
