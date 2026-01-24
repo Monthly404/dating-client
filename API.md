@@ -1,12 +1,22 @@
 # Dating API 문서
 
-## POST /api/dating/search
+## 목차
+
+- [일반 사용자 API](#일반-사용자-api)
+  - [POST /api/datings/search - 소개팅 검색](#post-apidatingsearch)
+  - [GET /api/datings/{datingId} - 소개팅 단건 조회](#get-apidatingdatingid)
+
+---
+
+# 일반 사용자 API
+
+## POST /api/datings/search
 
 소개팅 그룹을 검색하고 필터링하는 API입니다.
 
 ### 기본 정보
 
-- **URL**: `/api/dating/search`
+- **URL**: `/api/datings/search`
 - **Method**: `POST`
 - **Content-Type**: `application/json`
 
@@ -322,7 +332,7 @@
       {
         "name": "강남 와인 소개팅",
         "thumbnail": "https://example.com/thumbnail.jpg",
-        "link": "https://example.com/dating/123",
+        "link": "https://example.com/datings/123",
         "address": {
           "sido": "서울특별시",
           "gugun": "강남구",
@@ -358,7 +368,7 @@
       {
         "name": "주말 등산 소개팅",
         "thumbnail": null,
-        "link": "https://example.com/dating/456",
+        "link": "https://example.com/datings/456",
         "address": {
           "sido": "경기도",
           "gugun": "수원시",
@@ -444,7 +454,7 @@
 강남구에서, 금요일 또는 토요일에, 5만원~10만원 사이의 모임을 검색하는 예제입니다.
 
 ```bash
-POST /api/dating/search
+POST /api/datings/search
 Content-Type: application/json
 
 {
@@ -464,7 +474,7 @@ Content-Type: application/json
       "maxPrice": 100000
     }
   ],
-  "page": 1,
+  "page": 0,
   "size": 10
 }
 ```
@@ -472,12 +482,12 @@ Content-Type: application/json
 ### 요청 예제: 필터 없이 전체 조회
 
 ```bash
-POST /api/dating/search
+POST /api/datings/search
 Content-Type: application/json
 
 {
   "filters": null,
-  "page": 1,
+  "page": 0,
   "size": 20
 }
 ```
@@ -485,12 +495,12 @@ Content-Type: application/json
 또는 빈 본문으로 요청:
 
 ```bash
-POST /api/dating/search
+POST /api/datings/search
 Content-Type: application/json
 
 {
   "filters": [],
-  "page": 1,
+  "page": 0,
   "size": 20
 }
 ```
@@ -500,7 +510,7 @@ Content-Type: application/json
 저녁 또는 밤 시간대에 열리며, 20대 또는 30대를 위한 모임을 검색하는 예제입니다.
 
 ```bash
-POST /api/dating/search
+POST /api/datings/search
 Content-Type: application/json
 
 {
@@ -514,7 +524,85 @@ Content-Type: application/json
       "ageGroups": ["TWENTIES", "THIRTIES"]
     }
   ],
-  "page": 1,
+  "page": 0,
   "size": 10
+}
+```
+
+---
+
+## GET /api/datings/{datingId}
+
+특정 소개팅 그룹을 조회하는 API입니다.
+
+### 기본 정보
+
+- **URL**: `/api/datings/{datingId}`
+- **Method**: `GET`
+
+---
+
+### Request
+
+#### Path Parameters
+
+| 파라미터 | 타입   | 필수 여부 | 설명      |
+| -------- | ------ | --------- | --------- |
+| datingId | `Long` | 필수      | Dating ID |
+
+### 요청 예제
+
+```bash
+GET /api/datings/1
+```
+
+### Response
+
+#### 성공 응답 (200 OK)
+
+```json
+{
+  "message": "성공",
+  "data": {
+    "name": "강남 와인 소개팅",
+    "thumbnail": "https://s3.amazonaws.com/bucket/thumbnail.jpg",
+    "link": "https://example.com/datings/1",
+    "address": {
+      "sido": "서울특별시",
+      "gugun": "강남구",
+      "dong": "역삼동",
+      "road": "테헤란로",
+      "detail": "123번지",
+      "latitude": 37.5012,
+      "longitude": 127.0396
+    },
+    "apply": {
+      "start": "2026-01-10T00:00:00",
+      "end": "2026-01-20T23:59:59"
+    },
+    "schedule": {
+      "type": "INSTANT",
+      "schedules": ["2026-01-25T19:00:00"],
+      "repeatSchedules": null
+    },
+    "price": 80000,
+    "ageRange": [25, 35],
+    "headCount": 20,
+    "tags": [
+      {
+        "type": "CONCEPT",
+        "value": "와인파티"
+      }
+    ]
+  }
+}
+```
+
+#### 에러 응답 (존재하지 않는 Dating)
+
+```json
+{
+  "message": "존재하지 않는 모임입니다.",
+  "data": null
 }
 ```

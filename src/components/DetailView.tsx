@@ -13,7 +13,7 @@ const DetailView: React.FC = () => {
 
   /** 이미지 로드 실패 시 폴백 이미지로 대체 */
   const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
+    e: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
     e.currentTarget.src = "/fallback-image.png";
   };

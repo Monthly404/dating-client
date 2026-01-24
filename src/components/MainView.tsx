@@ -11,6 +11,7 @@ import { HERO_SLIDES } from "../constants";
 import { useSearchDatingGroups } from "../queries/useDatingQueries";
 import type { DatingGroupResponse, DatingFilterParam } from "../types/dating";
 import type { Meeting } from "../types";
+import { DEFAULT_PAGE, DEFAULT_SIZE } from "../constants/search";
 
 /** 영문 요일을 한글로 변환하는 맵 */
 const DAY_MAP: Record<string, string> = {
@@ -88,7 +89,7 @@ const formatShortDate = (date: Date): string => {
  */
 const transformDatingGroupToMeeting = (
   group: DatingGroupResponse,
-  index: number
+  index: number,
 ): Meeting => {
   const isOneTime = group.schedule?.type === "INSTANT";
 
@@ -110,7 +111,7 @@ const transformDatingGroupToMeeting = (
       .join(", ");
     timeStr = `매주 ${days} ${time}`;
     regularDays = group.schedule.repeatSchedules.map(
-      (s) => DAY_MAP[s.day] || s.day
+      (s) => DAY_MAP[s.day] || s.day,
     );
   }
 
@@ -145,14 +146,14 @@ const MainView: React.FC = () => {
 
   /** 소개팅 모임 목록 조회 */
   const { data: pagingData, isLoading } = useSearchDatingGroups({
-    page: 1,
-    size: 20,
+    page: DEFAULT_PAGE,
+    size: DEFAULT_SIZE,
     filters: filters,
   });
 
   /** API 응답을 UI용 Meeting 배열로 변환 */
   const meetings: Meeting[] =
-    pagingData?.datingGroups.map(transformDatingGroupToMeeting) || [];
+    pagingData?.datingGroups?.map(transformDatingGroupToMeeting) || [];
 
   /** 히어로 캐러셀 자동 전환 */
   useEffect(() => {
