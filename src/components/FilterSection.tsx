@@ -118,24 +118,51 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
   /** 기타 컨셉 필터 - 선택된 컨셉 목록 */
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
 
-  /** 필터가 초기 상태에서 변경되었는지 여부 */
+  /** 마지막으로 적용된 필터 상태 */
+  const [appliedState, setAppliedState] = useState({
+    dateModified: false,
+    startDate: getTodayString(),
+    endDate: getOneMonthLaterString(),
+    selectedDistricts: [] as string[],
+    selectedDays: [] as string[],
+    selectedTimes: [] as string[],
+    selectedAges: [] as string[],
+    priceRange: PRICE_MAX,
+    selectedType: "",
+    selectedConcepts: [] as string[],
+  });
+
+  /** 필터가 적용된 상태에서 변경되었는지 여부 */
   const [hasChanges, setHasChanges] = useState(false);
 
-  /** 필터 변경 여부 감지 */
+  /** 배열 비교 헬퍼 함수 */
+  const arraysEqual = (a: string[], b: string[]) => {
+    if (a.length !== b.length) return false;
+    const sortedA = [...a].sort();
+    const sortedB = [...b].sort();
+    return sortedA.every((val, idx) => val === sortedB[idx]);
+  };
+
+  /** 필터 변경 여부 감지 - 적용된 상태와 비교 */
   useEffect(() => {
     const changed =
-      dateModified ||
-      selectedDistricts.length > 0 ||
-      selectedDays.length > 0 ||
-      selectedTimes.length > 0 ||
-      selectedAges.length > 0 ||
-      priceRange < PRICE_MAX ||
-      selectedType !== "" ||
-      selectedConcepts.length > 0;
+      dateModified !== appliedState.dateModified ||
+      (dateModified &&
+        (startDate !== appliedState.startDate ||
+          endDate !== appliedState.endDate)) ||
+      !arraysEqual(selectedDistricts, appliedState.selectedDistricts) ||
+      !arraysEqual(selectedDays, appliedState.selectedDays) ||
+      !arraysEqual(selectedTimes, appliedState.selectedTimes) ||
+      !arraysEqual(selectedAges, appliedState.selectedAges) ||
+      priceRange !== appliedState.priceRange ||
+      selectedType !== appliedState.selectedType ||
+      !arraysEqual(selectedConcepts, appliedState.selectedConcepts);
 
     setHasChanges(changed);
   }, [
     dateModified,
+    startDate,
+    endDate,
     selectedDistricts,
     selectedDays,
     selectedTimes,
@@ -143,6 +170,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
     priceRange,
     selectedType,
     selectedConcepts,
+    appliedState,
   ]);
 
   /** 모바일 모달 열릴 때 배경 스크롤 방지 */
@@ -298,6 +326,20 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
         tagType: "CONCEPT",
         value: concept,
       });
+    });
+
+    // 현재 상태를 적용된 상태로 저장
+    setAppliedState({
+      dateModified,
+      startDate,
+      endDate,
+      selectedDistricts: [...selectedDistricts],
+      selectedDays: [...selectedDays],
+      selectedTimes: [...selectedTimes],
+      selectedAges: [...selectedAges],
+      priceRange,
+      selectedType,
+      selectedConcepts: [...selectedConcepts],
     });
 
     // 부모 컴포넌트로 필터 전달 및 모달 닫기
