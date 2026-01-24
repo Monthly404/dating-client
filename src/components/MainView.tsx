@@ -97,7 +97,7 @@ const MainView: React.FC = () => {
 
   /** API 응답을 UI용 Meeting 배열로 변환 */
   const meetings: Meeting[] =
-    pagingData?.datingGroups?.map(transformDatingGroupToMeeting) || [];
+    pagingData?.datings?.map(transformDatingGroupToMeeting) || [];
 
   /** 히어로 캐러셀 자동 전환 */
   useEffect(() => {

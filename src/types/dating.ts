@@ -140,7 +140,7 @@ export interface DatingGroupResponse {
 
 export interface DatingGroupPagingResponse {
   totalCount: number;
-  datingGroups: DatingGroupResponse[];
+  datings: DatingGroupResponse[];
 }
 
 export interface CommonResponse<T> {
