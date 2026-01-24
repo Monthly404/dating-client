@@ -126,6 +126,7 @@ export interface TagResponse {
 }
 
 export interface DatingGroupResponse {
+  id: number;
   name: string;
   thumbnail?: string;
   link?: string;
@@ -136,6 +137,7 @@ export interface DatingGroupResponse {
   ageRange?: number[];
   headCount?: number;
   tags?: TagResponse[];
+  vendor?: string;
 }
 
 export interface DatingGroupPagingResponse {

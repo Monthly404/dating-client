@@ -28,13 +28,9 @@ const CAROUSEL_INTERVAL = 5000;
 /**
  * API에서 받은 DatingGroupResponse를 UI용 Meeting 타입으로 변환
  * @param group API 응답 데이터
- * @param index 인덱스 (임시 ID로 사용)
  * @returns Meeting 객체
  */
-const transformDatingGroupToMeeting = (
-  group: DatingGroupResponse,
-  index: number,
-): Meeting => {
+const transformDatingGroupToMeeting = (group: DatingGroupResponse): Meeting => {
   const isOneTime = group.schedule?.type === "INSTANT";
 
   // 시간 문자열 생성
@@ -60,7 +56,7 @@ const transformDatingGroupToMeeting = (
   }
 
   return {
-    id: index,
+    id: group.id,
     title: group.name,
     subtitle: group.tags?.map((t) => t.value).join(", ") || "",
     image: group.thumbnail || "",

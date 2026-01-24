@@ -269,6 +269,7 @@
 
 | 필드      | 타입                     | 설명                         |
 | --------- | ------------------------ | ---------------------------- |
+| id        | `Integer`                | 소개팅 그룹 고유 ID          |
 | name      | `String`                 | 모임 이름                    |
 | thumbnail | `String`                 | 썸네일 이미지 URL (nullable) |
 | link      | `String`                 | 상세 정보 링크 (nullable)    |
@@ -279,6 +280,7 @@
 | ageRange  | `List<Integer>`          | 연령대 범위 (nullable)       |
 | headCount | `Integer`                | 모집 인원 (nullable)         |
 | tags      | `List<TagResponse>`      | 태그 목록                    |
+| vendor    | `String`                 | 업체명 (nullable)            |
 
 **AddressResponse 필드:**
 
@@ -330,6 +332,7 @@
     "totalCount": 42,
     "datingGroups": [
       {
+        "id": 1,
         "name": "강남 와인 소개팅",
         "thumbnail": "https://example.com/thumbnail.jpg",
         "link": "https://example.com/datings/123",
@@ -363,9 +366,11 @@
             "type": "ORGANIZER",
             "value": "사설"
           }
-        ]
+        ],
+        "vendor": "와인소셜클럽"
       },
       {
+        "id": 2,
         "name": "주말 등산 소개팅",
         "thumbnail": null,
         "link": "https://example.com/datings/456",
@@ -408,7 +413,8 @@
             "type": "ORGANIZER",
             "value": "지자체"
           }
-        ]
+        ],
+        "vendor": null
       }
     ]
   }
