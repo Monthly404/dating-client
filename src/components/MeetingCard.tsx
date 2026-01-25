@@ -10,7 +10,7 @@ interface MeetingCardProps {
 const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
   /** 이미지 로드 실패 시 폴백 이미지로 대체 */
   const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
+    e: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
     e.currentTarget.src = "/fallback-image.png";
   };
@@ -36,7 +36,7 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
             : `매주 ${meeting.regularDays?.join(", ")}`}
         </div>
 
-        <div className="card-price">{meeting.price} ~</div>
+        <div className="card-price">{meeting.price}</div>
         <div className="card-tags">
           {meeting.tags.map((tag, index) => (
             <span key={index}>{tag}</span>

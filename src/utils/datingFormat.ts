@@ -45,8 +45,9 @@ export const formatLocation = (datingGroup: DatingResponse): string => {
  * @returns 포맷된 가격 문자열
  */
 export const formatPrice = (price?: number): string => {
-  if (!price) return "무료";
-  return `${price.toLocaleString()}원~`;
+  if (price === 0) return "무료";
+  if (!price) return ""; // null/undefined일 경우 빈 문자열 반환 (혹은 '무료'로 할지 정책에 따름. 여기선 기존 !price가 무료였으므로 0도 포함. 안전하게 둘 분리)
+  return `${price.toLocaleString()}원 ~`;
 };
 
 /**

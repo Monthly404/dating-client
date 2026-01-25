@@ -129,13 +129,14 @@ const DetailView: React.FC = () => {
               <Button
                 size="lg"
                 fullWidth
+                disabled={!datingGroup.link}
                 onClick={() => {
                   if (datingGroup.link) {
                     window.open(datingGroup.link, "_blank");
                   }
                 }}
               >
-                방문 예약하기
+                {datingGroup.link ? "방문 예약하기" : "예약 링크 준비중"}
               </Button>
             </div>
           </div>
@@ -143,7 +144,31 @@ const DetailView: React.FC = () => {
           <div className="map-section">
             <h3>오시는 길</h3>
             <div className="map-placeholder">
-              {datingGroup.address?.gugun || "위치"} 지도 영역
+              <p>
+                {datingGroup.address?.road ||
+                  datingGroup.address?.gugun ||
+                  "위치 정보 없음"}
+              </p>
+              {datingGroup.address?.detail && (
+                <p
+                  style={{
+                    marginTop: "8px",
+                    color: "var(--color-secondary)",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  {datingGroup.address.detail}
+                </p>
+              )}
+              <div
+                style={{
+                  marginTop: "16px",
+                  fontSize: "0.85rem",
+                  color: "var(--color-secondary)",
+                }}
+              >
+                🗺️ 지도는 추후 업데이트될 예정입니다
+              </div>
             </div>
           </div>
         </div>

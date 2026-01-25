@@ -58,6 +58,12 @@
   background-color: rgba(255, 255, 255, 0.9); /* Clean white */
   color: var(--color-primary);
   padding: 4px 10px; /* Compact chip size */
+
+  /* 긴 텍스트 말줄임 */
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.75rem; /* Small text */
   font-weight: 700;
   border-radius: 20px; /* Capsule shape */
@@ -85,9 +91,14 @@
   margin-bottom: 2px; /* Tighter spacing */
   color: var(--color-primary);
   line-height: 1.3;
-  white-space: nowrap;
+  /* 2줄 말줄임 처리 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 3rem; /* 2줄 높이 확보 (line-height 1.3 * 2줄 + 여유) */
   letter-spacing: -0.01em;
 }
 
