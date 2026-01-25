@@ -2,18 +2,14 @@ import React, { useState, useEffect, useMemo } from "react";
 import "./FilterSection.css";
 import {
   SEOUL_DISTRICTS,
+  SEOUL_DISTRICT_CODES,
+  MAIN_DISTRICT_CODES,
   DAYS_OF_WEEK,
   TIME_SLOTS,
-  AGE_GROUPS,
   MEETING_CONCEPTS,
 } from "../constants";
 import { ChipGroup } from "./common/ChipGroup";
-import type {
-  DatingFilterParam,
-  DayOfWeek,
-  TimeRange,
-  AgeGroup,
-} from "../types/dating";
+import type { DatingFilterParam, DayOfWeek, TimeRange } from "../types/dating";
 
 interface FilterSectionProps {
   /** 필터 적용 시 호출되는 콜백 */
@@ -37,13 +33,6 @@ const TIME_MAP: Record<string, TimeRange> = {
   오후: "AFTERNOON",
   저녁: "EVENING",
   밤: "NIGHT",
-};
-
-/** 한글 연령대 → 영문 연령대 Enum 변환 맵 */
-const AGE_MAP: Record<string, AgeGroup> = {
-  "20대": "TWENTIES",
-  "30대": "THIRTIES",
-  "40대 이상": "ELDER",
 };
 
 /** 운영 주체 옵션 */
@@ -97,17 +86,14 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
   /** 날짜가 사용자에 의해 수정되었는지 여부 */
   const [dateModified, setDateModified] = useState(false);
 
-  /** 지역 필터 - 선택된 구 목록 */
-  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
+  /** 지역 필터 - 선택된 행정동 코드 목록 */
+  const [selectedRegionCodes, setSelectedRegionCodes] = useState<string[]>([]);
 
   /** 요일 필터 - 선택된 요일 목록 */
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   /** 시간대 필터 - 선택된 시간대 목록 */
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
-
-  /** 연령대 필터 - 선택된 연령대 목록 */
-  const [selectedAges, setSelectedAges] = useState<string[]>([]);
 
   /** 가격 필터 - 최대 가격 (100000 = 전체) */
   const [priceRange, setPriceRange] = useState(PRICE_MAX);
@@ -123,10 +109,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
     dateModified: false,
     startDate: getTodayString(),
     endDate: getOneMonthLaterString(),
-    selectedDistricts: [] as string[],
+    selectedRegionCodes: [] as string[],
     selectedDays: [] as string[],
     selectedTimes: [] as string[],
-    selectedAges: [] as string[],
     priceRange: PRICE_MAX,
     selectedType: "",
     selectedConcepts: [] as string[],
@@ -147,10 +132,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
       (dateModified &&
         (startDate !== appliedState.startDate ||
           endDate !== appliedState.endDate)) ||
-      !arraysEqual(selectedDistricts, appliedState.selectedDistricts) ||
+      !arraysEqual(selectedRegionCodes, appliedState.selectedRegionCodes) ||
       !arraysEqual(selectedDays, appliedState.selectedDays) ||
       !arraysEqual(selectedTimes, appliedState.selectedTimes) ||
-      !arraysEqual(selectedAges, appliedState.selectedAges) ||
       priceRange !== appliedState.priceRange ||
       selectedType !== appliedState.selectedType ||
       !arraysEqual(selectedConcepts, appliedState.selectedConcepts)
@@ -159,10 +143,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
     dateModified,
     startDate,
     endDate,
-    selectedDistricts,
+    selectedRegionCodes,
     selectedDays,
     selectedTimes,
-    selectedAges,
     priceRange,
     selectedType,
     selectedConcepts,
@@ -253,15 +236,44 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
       });
     }
 
-    // 2. 지역 필터 (서울 구 단위)
-    if (selectedDistricts.length > 0) {
-      selectedDistricts.forEach((district) => {
+    // 2. 지역 필터 (행정동 코드)
+    if (selectedRegionCodes.length > 0) {
+      const otherCode = SEOUL_DISTRICT_CODES["기타"];
+      const hasOther = selectedRegionCodes.includes(otherCode);
+
+      if (hasOther) {
+        // "기타"가 포함된 경우
+        const selectedMainCodes = selectedRegionCodes.filter(
+          (code) => code !== otherCode,
+        );
+
+        if (selectedMainCodes.length === 0) {
+          // "기타"만 선택된 경우: 4개 주요 구를 exclude
+          filters.push({
+            type: "REGION_CODE",
+            includes: [],
+            excludes: MAIN_DISTRICT_CODES,
+          });
+        } else {
+          // "기타"와 다른 구가 함께 선택된 경우
+          // 선택된 구는 includes, 선택되지 않은 주요 구는 excludes
+          const excludeCodes = MAIN_DISTRICT_CODES.filter(
+            (code) => !selectedMainCodes.includes(code),
+          );
+          filters.push({
+            type: "REGION_CODE",
+            includes: selectedMainCodes,
+            excludes: excludeCodes,
+          });
+        }
+      } else {
+        // "기타"가 선택되지 않은 경우: 기존 로직 (선택된 구만 includes)
         filters.push({
-          type: "DISTRICT",
-          sido: "서울특별시",
-          gugun: district,
+          type: "REGION_CODE",
+          includes: selectedRegionCodes,
+          excludes: [],
         });
-      });
+      }
     }
 
     // 3. 요일 필터
@@ -282,17 +294,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
         filters.push({
           type: "TIME_RANGE",
           timeRanges: enumTimes,
-        });
-      }
-    }
-
-    // 5. 연령대 필터
-    if (selectedAges.length > 0) {
-      const enumAges = selectedAges.map((a) => AGE_MAP[a]).filter(Boolean);
-      if (enumAges.length > 0) {
-        filters.push({
-          type: "AGE_RANGE",
-          ageGroups: enumAges,
         });
       }
     }
@@ -329,10 +330,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
       dateModified,
       startDate,
       endDate,
-      selectedDistricts: [...selectedDistricts],
+      selectedRegionCodes: [...selectedRegionCodes],
       selectedDays: [...selectedDays],
       selectedTimes: [...selectedTimes],
-      selectedAges: [...selectedAges],
       priceRange,
       selectedType,
       selectedConcepts: [...selectedConcepts],
@@ -393,23 +393,26 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
           <div className="filter-group">
             <h4>지역</h4>
             <div className="district-grid">
-              {SEOUL_DISTRICTS.map((district) => (
-                <button
-                  key={district}
-                  className={`district-btn ${
-                    selectedDistricts.includes(district) ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    toggleSelection(
-                      selectedDistricts,
-                      setSelectedDistricts,
-                      district,
-                    )
-                  }
-                >
-                  {district}
-                </button>
-              ))}
+              {SEOUL_DISTRICTS.map((district) => {
+                const regionCode = SEOUL_DISTRICT_CODES[district];
+                return (
+                  <button
+                    key={district}
+                    className={`district-btn ${
+                      selectedRegionCodes.includes(regionCode) ? "active" : ""
+                    }`}
+                    onClick={() =>
+                      toggleSelection(
+                        selectedRegionCodes,
+                        setSelectedRegionCodes,
+                        regionCode,
+                      )
+                    }
+                  >
+                    {district}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -440,16 +443,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
               items={TIME_SLOTS}
               selectedItems={selectedTimes}
               onToggle={handleToggle(selectedTimes, setSelectedTimes)}
-            />
-          </div>
-
-          {/* 5. 연령대 필터 */}
-          <div className="filter-group">
-            <h4>연령대</h4>
-            <ChipGroup
-              items={AGE_GROUPS}
-              selectedItems={selectedAges}
-              onToggle={handleToggle(selectedAges, setSelectedAges)}
             />
           </div>
 
