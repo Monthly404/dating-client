@@ -1,10 +1,9 @@
 export type FilterType =
-  | "DISTRICT"
+  | "REGION_CODE"
   | "DAYS"
   | "APPLY_PERIOD"
   | "SCHEDULE_PERIOD"
   | "TIME_RANGE"
-  | "AGE_RANGE"
   | "PRICE_RANGE"
   | "HEAD_COUNT"
   | "ETC";
@@ -19,17 +18,16 @@ export type DayOfWeek =
   | "SUNDAY";
 
 export type TimeRange = "MORNING" | "AFTERNOON" | "EVENING" | "NIGHT";
-export type AgeGroup = "TWENTIES" | "THIRTIES" | "ELDER";
 
 // Filter Interfaces
 interface BaseFilter {
   type: FilterType;
 }
 
-export interface DistrictFilter extends BaseFilter {
-  type: "DISTRICT";
-  sido: string;
-  gugun: string;
+export interface RegionCodeFilter extends BaseFilter {
+  type: "REGION_CODE";
+  includes: string[];
+  excludes: string[];
 }
 
 export interface DaysFilter extends BaseFilter {
@@ -54,11 +52,6 @@ export interface TimeRangeFilter extends BaseFilter {
   timeRanges: TimeRange[];
 }
 
-export interface AgeRangeFilter extends BaseFilter {
-  type: "AGE_RANGE";
-  ageGroups: AgeGroup[];
-}
-
 export interface PriceRangeFilter extends BaseFilter {
   type: "PRICE_RANGE";
   minPrice?: number;
@@ -77,12 +70,11 @@ export interface EtcFilter extends BaseFilter {
 }
 
 export type DatingFilterParam =
-  | DistrictFilter
+  | RegionCodeFilter
   | DaysFilter
   | ApplyPeriodFilter
   | SchedulePeriodFilter
   | TimeRangeFilter
-  | AgeRangeFilter
   | PriceRangeFilter
   | HeadCountFilter
   | EtcFilter;
@@ -90,6 +82,7 @@ export type DatingFilterParam =
 // Request Response Interfaces
 export interface SearchDatingParams {
   filters?: DatingFilterParam[];
+  sort?: "RECOMMEND" | "LATEST";
   page?: number;
   size?: number;
 }
@@ -125,7 +118,13 @@ export interface TagResponse {
   value?: string;
 }
 
-export interface DatingGroupResponse {
+export interface VendorProfileResponse {
+  id: number;
+  name: string;
+  thumbnail?: string;
+}
+
+export interface DatingResponse {
   id: number;
   name: string;
   thumbnail?: string;
@@ -137,13 +136,17 @@ export interface DatingGroupResponse {
   ageRange?: number[];
   headCount?: number;
   tags?: TagResponse[];
-  vendor?: string;
+  vendor?: VendorProfileResponse;
 }
 
-export interface DatingGroupPagingResponse {
+export interface DatingPagingResponse {
   totalCount: number;
-  datings: DatingGroupResponse[];
+  datings: DatingResponse[];
 }
+
+// Legacy type aliases for backward compatibility
+export type DatingGroupResponse = DatingResponse;
+export type DatingGroupPagingResponse = DatingPagingResponse;
 
 export interface CommonResponse<T> {
   message: string;

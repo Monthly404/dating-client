@@ -1,7 +1,4 @@
-import type {
-  DatingGroupResponse,
-  DatingScheduleResponse,
-} from "../types/dating";
+import type { DatingResponse, DatingScheduleResponse } from "../types/dating";
 import { DAY_MAP, formatDateTime } from "./dateFormat";
 
 /**
@@ -37,7 +34,7 @@ export const formatDatingSchedule = (
  * @param datingGroup 소개팅 그룹 정보
  * @returns 포맷된 주소 문자열
  */
-export const formatLocation = (datingGroup: DatingGroupResponse): string => {
+export const formatLocation = (datingGroup: DatingResponse): string => {
   if (!datingGroup.address) return "위치 정보 없음";
   return `${datingGroup.address.sido} · ${datingGroup.address.gugun}`;
 };
@@ -53,21 +50,11 @@ export const formatPrice = (price?: number): string => {
 };
 
 /**
- * 나이대 정보를 포맷팅
- * @param ageRange 나이대 범위 [최소, 최대]
- * @returns 포맷된 나이대 문자열
- */
-export const formatAgeRange = (ageRange?: number[]): string => {
-  if (!ageRange || ageRange.length < 2) return "연령 제한 없음";
-  return `${ageRange[0]}~${ageRange[1]}세`;
-};
-
-/**
  * 태그 정보를 포맷팅
  * @param datingGroup 소개팅 그룹 정보
  * @returns 포맷된 태그 배열
  */
-export const formatTags = (datingGroup: DatingGroupResponse): string[] => {
+export const formatTags = (datingGroup: DatingResponse): string[] => {
   return (
     datingGroup.tags
       ?.filter((tag) => tag.value)

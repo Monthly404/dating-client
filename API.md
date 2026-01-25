@@ -4,7 +4,7 @@
 
 - [일반 사용자 API](#일반-사용자-api)
   - [POST /api/datings/search - 소개팅 검색](#post-apidatingsearch)
-  - [GET /api/datings/{datingId} - 소개팅 단건 조회](#get-apidatingdatingid)
+  - [GET /api/datings/{datingId} - 소개팅 단건 조회](#get-apidatingsdatingid)
 
 ---
 
@@ -29,33 +29,41 @@
 | 필드    | 타입                      | 필수 여부 | 설명                                 |
 | ------- | ------------------------- | --------- | ------------------------------------ |
 | filters | `List<DatingFilterParam>` | 선택      | 검색 필터 목록 (여러 필터 조합 가능) |
+| sort    | `String`                  | 선택      | 정렬 방식 (`RECOMMEND`, `LATEST`)    |
 | page    | `Integer`                 | 선택      | 페이지 번호 (0부터 시작)             |
 | size    | `Integer`                 | 선택      | 페이지 당 항목 수                    |
+
+### 정렬 옵션
+
+| 값          | 설명        |
+| ----------- | ----------- |
+| `RECOMMEND` | 추천순 정렬 |
+| `LATEST`    | 최신순 정렬 |
 
 ### 필터 타입
 
 모든 필터는 `type` 필드를 포함하며, 각 타입별로 추가 파라미터가 필요합니다.
 
-#### 1. DISTRICT - 지역 필터
+#### 1. REGION_CODE - 지역 코드 필터
 
-특정 시/도와 구/군으로 지역을 필터링합니다.
+행정동 코드(5자리)로 지역을 필터링합니다.
 
 **파라미터:**
 
-- `sido` (String, 필수): 시/도 (예: "서울특별시")
-- `gugun` (String, 필수): 구/군 (예: "강남구")
+- `includes` (List<String>, 필수): 포함할 지역 코드 목록 (5자리)
+- `excludes` (List<String>, 필수): 제외할 지역 코드 목록 (5자리)
 
 **유효성 검증:**
 
-- `sido`와 `gugun`은 빈 문자열이 아니어야 합니다.
+- 각 코드는 5자리 문자열이어야 합니다.
 
 **예제:**
 
 ```json
 {
-  "type": "DISTRICT",
-  "sido": "서울특별시",
-  "gugun": "강남구"
+  "type": "REGION_CODE",
+  "includes": ["11680", "11650"],
+  "excludes": []
 }
 ```
 
@@ -153,30 +161,7 @@
 }
 ```
 
-#### 6. AGE_RANGE - 나이대 필터
-
-특정 나이대의 모임을 필터링합니다.
-
-**파라미터:**
-
-- `ageGroups` (List<String>, 필수): 나이대 목록
-
-**가능한 나이대 값:**
-
-- `TWENTIES` - 20대
-- `THIRTIES` - 30대
-- `ELDER` - 40대 이상
-
-**예제:**
-
-```json
-{
-  "type": "AGE_RANGE",
-  "ageGroups": ["TWENTIES", "THIRTIES"]
-}
-```
-
-#### 7. PRICE_RANGE - 가격 범위 필터
+#### 6. PRICE_RANGE - 가격 범위 필터
 
 특정 가격 범위 내의 모임을 필터링합니다.
 
@@ -199,7 +184,7 @@
 }
 ```
 
-#### 8. HEAD_COUNT - 인원수 필터
+#### 7. HEAD_COUNT - 인원수 필터
 
 특정 인원수의 모임을 필터링합니다.
 
@@ -220,7 +205,7 @@
 }
 ```
 
-#### 9. ETC - 기타 필터
+#### 8. ETC - 기타 필터
 
 태그 타입과 값으로 모임을 필터링합니다. (지자체/사설, 컨셉, 애프터파티 등)
 
@@ -258,18 +243,18 @@
 }
 ```
 
-**DatingGroupPagingResponse 구조:**
+**DatingPagingResponse 구조:**
 
-| 필드         | 타입                        | 설명              |
-| ------------ | --------------------------- | ----------------- |
-| totalCount   | `Integer`                   | 전체 검색 결과 수 |
-| datingGroups | `List<DatingGroupResponse>` | 소개팅 그룹 목록  |
+| 필드       | 타입                   | 설명              |
+| ---------- | ---------------------- | ----------------- |
+| totalCount | `Integer`              | 전체 검색 결과 수 |
+| datings    | `List<DatingResponse>` | 소개팅 목록       |
 
 **DatingResponse 필드:**
 
 | 필드      | 타입                     | 설명                         |
 | --------- | ------------------------ | ---------------------------- |
-| id        | `Integer`                | 소개팅 그룹 고유 ID          |
+| id        | `Long`                   | 소개팅 ID                    |
 | name      | `String`                 | 모임 이름                    |
 | thumbnail | `String`                 | 썸네일 이미지 URL (nullable) |
 | link      | `String`                 | 상세 정보 링크 (nullable)    |
@@ -280,7 +265,7 @@
 | ageRange  | `List<Integer>`          | 연령대 범위 (nullable)       |
 | headCount | `Integer`                | 모집 인원 (nullable)         |
 | tags      | `List<TagResponse>`      | 태그 목록                    |
-| vendor    | `String`                 | 업체명 (nullable)            |
+| vendor    | `VendorProfileResponse`  | 주최자 정보 (nullable)       |
 
 **AddressResponse 필드:**
 
@@ -318,10 +303,18 @@
 
 **TagResponse 필드:**
 
-| 필드  | 타입     | 설명               |
-| ----- | -------- | ------------------ |
-| type  | `String` | 태그 타입          |
-| value | `String` | 태그 값 (nullable) |
+| 필드  | 타입     | 설명                                                                |
+| ----- | -------- | ------------------------------------------------------------------- |
+| type  | `String` | 태그 타입 (CONCEPT, AFTER_PARTY, ONLINE, LOCAL_GOVERNMENT, ALCOHOL) |
+| value | `String` | 태그 값 (nullable)                                                  |
+
+**VendorProfileResponse 필드:**
+
+| 필드      | 타입     | 설명                                |
+| --------- | -------- | ----------------------------------- |
+| id        | `Long`   | 주최자 ID                           |
+| name      | `String` | 주최자 이름                         |
+| thumbnail | `String` | 주최자 썸네일 이미지 URL (nullable) |
 
 ### 성공 응답 예제
 
@@ -330,12 +323,12 @@
   "message": "성공",
   "data": {
     "totalCount": 42,
-    "datingGroups": [
+    "datings": [
       {
-        "id": 1,
+        "id": 123,
         "name": "강남 와인 소개팅",
         "thumbnail": "https://example.com/thumbnail.jpg",
-        "link": "https://example.com/datings/123",
+        "link": "https://example.com/dating/123",
         "address": {
           "sido": "서울특별시",
           "gugun": "강남구",
@@ -351,8 +344,7 @@
         },
         "schedule": {
           "type": "INSTANT",
-          "schedules": ["2026-01-25T19:00:00", "2026-02-01T19:00:00"],
-          "repeatSchedules": null
+          "schedules": ["2026-01-25T19:00:00", "2026-02-01T19:00:00"]
         },
         "price": 80000,
         "ageRange": [25, 35],
@@ -367,13 +359,17 @@
             "value": "사설"
           }
         ],
-        "vendor": "와인소셜클럽"
+        "vendor": {
+          "id": 1,
+          "name": "와인파티클럽",
+          "thumbnail": "https://example.com/vendor/1/thumbnail.jpg"
+        }
       },
       {
-        "id": 2,
+        "id": 456,
         "name": "주말 등산 소개팅",
         "thumbnail": null,
-        "link": "https://example.com/datings/456",
+        "link": "https://example.com/dating/456",
         "address": {
           "sido": "경기도",
           "gugun": "수원시",
@@ -389,7 +385,6 @@
         },
         "schedule": {
           "type": "REPEAT",
-          "schedules": null,
           "repeatSchedules": [
             {
               "day": "SATURDAY",
@@ -410,7 +405,7 @@
             "value": "등산"
           },
           {
-            "type": "ORGANIZER",
+            "type": "LOCAL_GOVERNMENT",
             "value": "지자체"
           }
         ],
@@ -457,7 +452,7 @@
 
 ### 요청 예제: 여러 필터 조합
 
-강남구에서, 금요일 또는 토요일에, 5만원~10만원 사이의 모임을 검색하는 예제입니다.
+강남구(11680)에서, 금요일 또는 토요일에, 5만원~10만원 사이의 모임을 검색하는 예제입니다.
 
 ```bash
 POST /api/datings/search
@@ -466,9 +461,9 @@ Content-Type: application/json
 {
   "filters": [
     {
-      "type": "DISTRICT",
-      "sido": "서울특별시",
-      "gugun": "강남구"
+      "type": "REGION_CODE",
+      "includes": ["11680"],
+      "excludes": []
     },
     {
       "type": "DAYS",
@@ -480,6 +475,7 @@ Content-Type: application/json
       "maxPrice": 100000
     }
   ],
+  "sort": "RECOMMEND",
   "page": 0,
   "size": 10
 }
@@ -493,6 +489,7 @@ Content-Type: application/json
 
 {
   "filters": null,
+  "sort": "LATEST",
   "page": 0,
   "size": 20
 }
@@ -511,9 +508,9 @@ Content-Type: application/json
 }
 ```
 
-### 요청 예제: 시간대와 나이대 필터
+### 요청 예제: 시간대 필터
 
-저녁 또는 밤 시간대에 열리며, 20대 또는 30대를 위한 모임을 검색하는 예제입니다.
+저녁 또는 밤 시간대에 열리는 모임을 검색하는 예제입니다.
 
 ```bash
 POST /api/datings/search
@@ -524,12 +521,9 @@ Content-Type: application/json
     {
       "type": "TIME_RANGE",
       "timeRanges": ["EVENING", "NIGHT"]
-    },
-    {
-      "type": "AGE_RANGE",
-      "ageGroups": ["TWENTIES", "THIRTIES"]
     }
   ],
+  "sort": "RECOMMEND",
   "page": 0,
   "size": 10
 }
@@ -570,9 +564,10 @@ GET /api/datings/1
 {
   "message": "성공",
   "data": {
+    "id": 1,
     "name": "강남 와인 소개팅",
     "thumbnail": "https://s3.amazonaws.com/bucket/thumbnail.jpg",
-    "link": "https://example.com/datings/1",
+    "link": "https://example.com/dating/1",
     "address": {
       "sido": "서울특별시",
       "gugun": "강남구",
@@ -588,8 +583,7 @@ GET /api/datings/1
     },
     "schedule": {
       "type": "INSTANT",
-      "schedules": ["2026-01-25T19:00:00"],
-      "repeatSchedules": null
+      "schedules": ["2026-01-25T19:00:00"]
     },
     "price": 80000,
     "ageRange": [25, 35],
@@ -599,7 +593,12 @@ GET /api/datings/1
         "type": "CONCEPT",
         "value": "와인파티"
       }
-    ]
+    ],
+    "vendor": {
+      "id": 1,
+      "name": "와인파티클럽",
+      "thumbnail": "https://example.com/vendor/1/thumbnail.jpg"
+    }
   }
 }
 ```

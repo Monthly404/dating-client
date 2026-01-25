@@ -19,7 +19,6 @@ import { formatPrice, formatTags } from "../utils/datingFormat";
 const SORT_OPTIONS = [
   { value: "recommend", label: "추천순" },
   { value: "latest", label: "최신순" },
-  { value: "low-price", label: "낮은가격순" },
 ];
 
 /** 히어로 캐러셀 자동 전환 시간 (밀리초) */
@@ -65,7 +64,7 @@ const transformDatingGroupToMeeting = (group: DatingGroupResponse): Meeting => {
     tags: formatTags(group),
     time: timeStr,
     ageGroup: group.ageRange ? `${group.ageRange[0]}~${group.ageRange[1]}` : "",
-    company: "",
+    company: group.vendor?.name || "",
     isOneTime,
     regularDays,
     oneTimeDate,
@@ -84,8 +83,12 @@ const MainView: React.FC = () => {
   /** 적용된 필터 목록 */
   const [filters, setFilters] = useState<DatingFilterParam[]>([]);
 
+  /** 정렬 방식 */
+  const [sortBy, setSortBy] = useState<"RECOMMEND" | "LATEST">("RECOMMEND");
+
   /** 소개팅 모임 목록 조회 */
   const { data: pagingData, isLoading } = useSearchDatingGroups({
+    sort: sortBy,
     page: DEFAULT_PAGE,
     size: DEFAULT_SIZE,
     filters: filters,
@@ -167,7 +170,15 @@ const MainView: React.FC = () => {
               전체 모임{" "}
               {pagingData?.totalCount ? `(${pagingData.totalCount})` : ""}
             </h2>
-            <Select options={SORT_OPTIONS} defaultValue="recommend" />
+            <Select
+              options={SORT_OPTIONS}
+              value={sortBy.toLowerCase()}
+              onChange={(e) =>
+                setSortBy(
+                  e.target.value.toUpperCase() as "RECOMMEND" | "LATEST",
+                )
+              }
+            />
           </div>
 
           {/* 레이아웃: 사이드바 + 메인 컨텐츠 */}

@@ -4,13 +4,11 @@ import "./DetailView.css";
 import SEO from "./common/SEO";
 import { Container } from "./common/Container";
 import { Button } from "./common/Button";
-import { Tag } from "./common/Tag";
 import { useGetDatingGroup } from "../queries/useDatingQueries";
 import {
   formatDatingSchedule,
   formatLocation,
   formatPrice,
-  formatAgeRange,
   formatTags,
 } from "../utils/datingFormat";
 
@@ -66,7 +64,10 @@ const DetailView: React.FC = () => {
   const timeStr = formatDatingSchedule(datingGroup.schedule);
   const locationStr = formatLocation(datingGroup);
   const priceStr = formatPrice(datingGroup.price);
-  const ageGroupStr = formatAgeRange(datingGroup.ageRange);
+  const ageGroupStr =
+    datingGroup.ageRange && datingGroup.ageRange.length >= 2
+      ? `${datingGroup.ageRange[0]}~${datingGroup.ageRange[1]}세`
+      : "연령 제한 없음";
   const tags = formatTags(datingGroup);
 
   return (
@@ -104,8 +105,7 @@ const DetailView: React.FC = () => {
                 <div className="info-row">
                   <span className="label">업체명</span>
                   <span className="value">
-                    {datingGroup.tags?.find((t) => t.type === "ORGANIZER")
-                      ?.value || "소개팅.zip"}
+                    {datingGroup.vendor?.name || "업체 정보 없음"}
                   </span>
                 </div>
                 <div className="info-row">
@@ -119,7 +119,9 @@ const DetailView: React.FC = () => {
 
                 <div className="tags-container">
                   {tags.map((tag, index) => (
-                    <Tag key={index}>{tag}</Tag>
+                    <span key={index} className="tag-chip">
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
