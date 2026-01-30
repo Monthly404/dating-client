@@ -33,6 +33,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  color: transparent; /* Alt 텍스트 숨김 (폴백 로드 전 깜빡임 방지) */
 }
 
 .card-badge {

@@ -34,6 +34,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  color: transparent; /* Alt 텍스트 숨김 */
 }
 
 .info-section {

@@ -13,6 +13,7 @@ import {
   formatPrice,
   formatTags,
 } from "../utils/datingFormat";
+import { getFallbackImage } from "../utils/imageFallback";
 
 const DetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +28,7 @@ const DetailView: React.FC = () => {
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    e.currentTarget.src = "/fallback-image.png";
+    e.currentTarget.src = getFallbackImage(Number(id));
   };
 
   // 페이지 로드 시 최상단으로 스크롤
