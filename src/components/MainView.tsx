@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
+import MeetingCardSkeleton from "./MeetingCardSkeleton";
 import EmptyState from "./common/EmptyState";
 import SEO from "./common/SEO";
 import { Container } from "./common/Container";
@@ -166,10 +167,7 @@ const MainView: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <h2>
-              전체 모임{" "}
-              {pagingData?.totalCount ? `(${pagingData.totalCount})` : ""}
-            </h2>
+            <h2>전체 모임</h2>
             <Select
               options={SORT_OPTIONS}
               value={sortBy.toLowerCase()}
@@ -217,14 +215,10 @@ const MainView: React.FC = () => {
               // 목록 뷰
               <div style={{ flex: 1, width: "100%" }}>
                 {isLoading ? (
-                  <div
-                    style={{
-                      padding: "40px",
-                      textAlign: "center",
-                      color: "var(--color-secondary)",
-                    }}
-                  >
-                    목록을 불러오는 중입니다...
+                  <div className="meeting-grid">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <MeetingCardSkeleton key={i} />
+                    ))}
                   </div>
                 ) : meetings.length > 0 ? (
                   <div className="meeting-grid">

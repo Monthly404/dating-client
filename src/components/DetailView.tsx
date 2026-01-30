@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./DetailView.css";
+import "./common/Skeleton.css"; // Skeleton 스타일 추가
 import SEO from "./common/SEO";
 import { Container } from "./common/Container";
 import { Button } from "./common/Button";
@@ -34,13 +35,88 @@ const DetailView: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 로딩 중
+  // 로딩 중 (Skeleton UI)
   if (isLoading) {
     return (
       <div className="detail-page">
         <Container>
           <div className="detail-card">
-            <h2 style={{ padding: "40px", textAlign: "center" }}>로딩 중...</h2>
+            <div className="detail-grid">
+              {/* 왼쪽 이미지 영역 스켈레톤 */}
+              <div className="visual-section">
+                <div className="detail-image-wrapper">
+                  <div className="skeleton skeleton-rect" />
+                </div>
+              </div>
+
+              {/* 오른쪽 정보 영역 스켈레톤 */}
+              <div className="info-section">
+                <div className="info-header" style={{ border: "none" }}>
+                  <div
+                    className="skeleton skeleton-text"
+                    style={{ width: "60px", marginBottom: "1rem" }}
+                  />
+                  <div className="skeleton skeleton-title" />
+                  <div
+                    className="skeleton skeleton-text"
+                    style={{ width: "120px", height: "2rem" }}
+                  />
+                </div>
+
+                <div className="info-body">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1rem",
+                    }}
+                  >
+                    <div
+                      className="skeleton skeleton-text"
+                      style={{ width: "80%" }}
+                    />
+                    <div
+                      className="skeleton skeleton-text"
+                      style={{ width: "60%" }}
+                    />
+                    <div
+                      className="skeleton skeleton-text"
+                      style={{ width: "40%" }}
+                    />
+                  </div>
+                  <div
+                    className="skeleton"
+                    style={{
+                      height: "32px",
+                      marginTop: "2rem",
+                      width: "100%",
+                      maxWidth: "300px",
+                    }}
+                  />
+                </div>
+
+                <div
+                  className="skeleton"
+                  style={{
+                    height: "56px",
+                    borderRadius: "16px",
+                    marginTop: "auto",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* 하단 지도 영역 스켈레톤 */}
+            <div className="map-section" style={{ marginTop: "3rem" }}>
+              <div
+                className="skeleton skeleton-title"
+                style={{ width: "150px", height: "1.5rem" }}
+              />
+              <div
+                className="skeleton"
+                style={{ height: "320px", borderRadius: "16px" }}
+              />
+            </div>
           </div>
         </Container>
       </div>
@@ -50,20 +126,11 @@ const DetailView: React.FC = () => {
   // 에러 또는 데이터 없음
   if (isError || !datingGroup) {
     return (
-      <div className="detail-page">
+      <div className="detail-page detail-error-container">
         <Container>
-          <div
-            className="detail-card"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "400px",
-              padding: "40px",
-            }}
-          >
+          <div className="detail-error-content">
             <EmptyState
+              className="detail-empty-state"
               message="모임을 찾을 수 없습니다"
               submessage="요청하신 모임이 존재하지 않거나 정보가 올바르지 않습니다."
             />

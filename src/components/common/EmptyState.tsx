@@ -6,6 +6,8 @@ interface EmptyStateProps {
   message?: string;
   /** 서브 메시지 (선택사항) */
   submessage?: string;
+  /** 추가 CSS 클래스 */
+  className?: string;
 }
 
 /**
@@ -14,9 +16,10 @@ interface EmptyStateProps {
 const EmptyState: React.FC<EmptyStateProps> = ({
   message = "조건에 맞는 모임이 없습니다",
   submessage = "다른 필터 조건으로 검색해보세요",
+  className = "",
 }) => {
   return (
-    <div className="empty-state">
+    <div className={`empty-state ${className}`}>
       <div className="empty-state-content">
         <div className="empty-state-icon">
           <svg
