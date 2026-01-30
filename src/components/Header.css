@@ -9,7 +9,6 @@
   display: flex;
   align-items: center;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.15); /* Soft pink shadow */
 }
 
 /* Optional: Add shadow on scroll if we added JS state, but for now border is fine */
@@ -28,7 +27,7 @@
 }
 
 .text-logo-img {
-  height: 28px; /* Adjust based on logo aspect ratio */
+  height: 26px; /* Adjust based on logo aspect ratio */
   width: auto;
   object-fit: contain;
   /* If the logo is black and needs to be white, use filter or ensure png is white */
