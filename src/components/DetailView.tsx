@@ -14,6 +14,7 @@ import {
   formatTags,
 } from "../utils/datingFormat";
 import { getFallbackImage } from "../utils/imageFallback";
+import KakaoMap from "./common/KakaoMap";
 
 const DetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -227,33 +228,44 @@ const DetailView: React.FC = () => {
 
           <div className="map-section">
             <h3>오시는 길</h3>
-            <div className="map-placeholder">
-              <p>
-                {datingGroup.address?.road ||
-                  datingGroup.address?.gugun ||
-                  "위치 정보 없음"}
-              </p>
-              {datingGroup.address?.detail && (
-                <p
+            {datingGroup.address?.latitude && datingGroup.address?.longitude ? (
+              <div style={{ marginTop: "16px" }}>
+                <KakaoMap
+                  latitude={datingGroup.address.latitude}
+                  longitude={datingGroup.address.longitude}
+                />
+                <p style={{ marginTop: "12px", fontSize: "0.95rem" }}>
+                  {datingGroup.address.road || datingGroup.address.gugun}
+                  {datingGroup.address.detail && (
+                    <span
+                      style={{
+                        color: "var(--color-secondary)",
+                        marginLeft: "8px",
+                      }}
+                    >
+                      {datingGroup.address.detail}
+                    </span>
+                  )}
+                </p>
+              </div>
+            ) : (
+              <div className="map-placeholder">
+                <p>
+                  {datingGroup.address?.road ||
+                    datingGroup.address?.gugun ||
+                    "위치 정보 없음"}
+                </p>
+                <div
                   style={{
-                    marginTop: "8px",
+                    marginTop: "16px",
+                    fontSize: "0.85rem",
                     color: "var(--color-secondary)",
-                    fontSize: "0.9rem",
                   }}
                 >
-                  {datingGroup.address.detail}
-                </p>
-              )}
-              <div
-                style={{
-                  marginTop: "16px",
-                  fontSize: "0.85rem",
-                  color: "var(--color-secondary)",
-                }}
-              >
-                🗺️ 지도는 추후 업데이트될 예정입니다
+                  🗺️ 지도 정보를 불러올 수 없습니다
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </Container>
