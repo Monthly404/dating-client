@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./DetailView.css";
 import SEO from "./common/SEO";
 import { Container } from "./common/Container";
 import { Button } from "./common/Button";
+import EmptyState from "./common/EmptyState";
 import { useGetDatingGroup } from "../queries/useDatingQueries";
 import {
   formatDatingSchedule,
@@ -14,6 +15,7 @@ import {
 
 const DetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const {
     data: datingGroup,
     isLoading,
@@ -50,10 +52,24 @@ const DetailView: React.FC = () => {
     return (
       <div className="detail-page">
         <Container>
-          <div className="detail-card">
-            <h2 style={{ padding: "40px", textAlign: "center" }}>
-              모임을 찾을 수 없습니다.
-            </h2>
+          <div
+            className="detail-card"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "400px",
+              padding: "40px",
+            }}
+          >
+            <EmptyState
+              message="모임을 찾을 수 없습니다"
+              submessage="요청하신 모임이 존재하지 않거나 정보가 올바르지 않습니다."
+            />
+            <Button onClick={() => navigate("/")} size="md">
+              홈으로 돌아가기
+            </Button>
           </div>
         </Container>
       </div>

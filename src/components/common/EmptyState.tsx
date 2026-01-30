@@ -26,22 +26,22 @@ const EmptyState: React.FC<EmptyStateProps> = ({
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="40" cy="40" r="40" fill="#F8F9FA" />
+            <circle cx="40" cy="40" r="40" fill="#E9ECEF" />
             <path
               d="M30 35C30 34.4477 30.4477 34 31 34H49C49.5523 34 50 34.4477 50 35V50C50 50.5523 49.5523 51 49 51H31C30.4477 51 30 50.5523 30 50V35Z"
-              stroke="#CED4DA"
+              stroke="#ADB5BD"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M35 34V32C35 29.7909 36.7909 28 39 28H41C43.2091 28 45 29.7909 45 32V34"
-              stroke="#CED4DA"
+              stroke="#ADB5BD"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-            <circle cx="40" cy="42" r="2" fill="#ADB5BD" />
+            <circle cx="40" cy="42" r="2" fill="#868E96" />
           </svg>
         </div>
         <h3 className="empty-state-title">{message}</h3>
