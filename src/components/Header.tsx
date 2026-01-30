@@ -7,8 +7,12 @@ const Header: React.FC = () => {
   return (
     <header className="app-header">
       <Container className="header-inner">
-        <Link to="/" className="logo">
-          소개팅.zip
+        <Link to="/" className="text-logo-link">
+          <img
+            src="/text-logo.png"
+            alt="소개팅.zip"
+            className="text-logo-img"
+          />
         </Link>
       </Container>
     </header>

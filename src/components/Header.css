@@ -2,13 +2,14 @@
   position: sticky;
   top: 0;
   z-index: 1000; /* Ensure it stays on top */
-  background-color: rgba(255, 255, 255, 0.85); /* Slightly more transparent */
-  backdrop-filter: blur(16px); /* Stronger blur for premium feel */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background-color: var(--color-accent); /* Primary Brand Color (Pink) */
+  /* backdrop-filter: blur(16px); */ /* Removed blur for solid color, or keep if using rgba */
+  border-bottom: none; /* Removed border specifically */
   height: var(--header-height);
   display: flex;
   align-items: center;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.15); /* Soft pink shadow */
 }
 
 /* Optional: Add shadow on scroll if we added JS state, but for now border is fine */
@@ -20,12 +21,16 @@
   justify-content: space-between;
 }
 
-.logo {
-  font-family: "Pretendard", sans-serif;
-  font-size: 1.4rem; /* Slightly larger */
-  color: var(--color-accent);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  text-decoration: none;
-  cursor: pointer;
+.text-logo-link {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.text-logo-img {
+  height: 28px; /* Adjust based on logo aspect ratio */
+  width: auto;
+  object-fit: contain;
+  /* If the logo is black and needs to be white, use filter or ensure png is white */
+  /* filter: brightness(0) invert(1); */ /* Uncomment if logo is black and needs to be white */
 }
