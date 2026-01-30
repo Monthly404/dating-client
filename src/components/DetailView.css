@@ -164,3 +164,42 @@
   padding: 0 20px 24px 20px; /* 좌우 패딩 복구, 하단 간격 유지 */
   width: 100%; /* 가로 꽉 차게 해서 중앙 정렬 보장 */
 }
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .detail-page {
+    background-color: var(
+      --color-surface
+    ); /* 배경을 흰색으로 변경하여 카드 경계 없앰 */
+  }
+
+  /* 컨테이너 패딩은 기본(16px) 유지하여 너무 붙지 않게 함 */
+  .detail-page .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+
+  /* 카드 스타일 제거하되 상단 여백은 유지 */
+  .detail-card {
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    margin-top: var(--spacing-lg); /* 상단 여백 유지 */
+    padding: 0; /* 카드 내부 패딩 제거 (영역 확보) */
+  }
+
+  /* 이미지 스타일 복구 (Radius 유지) */
+  .detail-image-wrapper {
+    margin: 0; /* 강제 확장 제거 */
+    width: 100%;
+    /* border-radius는 .detail-image-wrapper 기본값 유지 */
+    aspect-ratio: 4/3; /* 비율 유지 */
+  }
+
+  .info-title {
+    font-size: 1.8rem;
+    white-space: normal;
+    overflow: visible;
+  }
+}
