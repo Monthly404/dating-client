@@ -168,7 +168,7 @@ const DetailView: React.FC = () => {
             <div className="visual-section">
               <div className="detail-image-wrapper">
                 <img
-                  src={datingGroup.thumbnail || "/fallback-image.png"}
+                  src={datingGroup.thumbnail || getFallbackImage(Number(id))}
                   alt={datingGroup.name}
                   className="detail-image"
                   onError={handleImageError}
@@ -223,7 +223,7 @@ const DetailView: React.FC = () => {
                   }
                 }}
               >
-                {datingGroup.link ? "방문 예약하기" : "예약 링크 준비중"}
+                {datingGroup.link ? "상세 정보 확인하기" : "상세 정보 준비중"}
               </Button>
             </div>
           </div>
@@ -264,7 +264,7 @@ const DetailView: React.FC = () => {
                     color: "var(--color-secondary)",
                   }}
                 >
-                  🗺️ 지도 정보를 불러올 수 없습니다
+                  지도 정보를 불러올 수 없습니다
                 </div>
               </div>
             )}
