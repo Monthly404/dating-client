@@ -40,7 +40,7 @@ export const formatDatingSchedule = (
       // "13:30:00" -> "13:30" or "16:00:00" -> "16"
       const [h, m] = sch.time.split(":");
       const hour = Number(h); // "09" -> 9, "16" -> 16
-      const time = m === "00" ? `${hour}시` : `${hour}:${m}시`;
+      const time = m === "00" ? `${hour}시` : `${hour}:${m}`;
 
       if (!dayToTimes.has(sch.day)) {
         dayToTimes.set(sch.day, []);

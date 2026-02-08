@@ -96,7 +96,6 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 3rem; /* 2줄 높이 확보 (line-height 1.3 * 2줄 + 여유) */
   letter-spacing: -0.01em;
 }
 
