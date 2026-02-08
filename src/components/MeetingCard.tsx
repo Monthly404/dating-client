@@ -37,9 +37,10 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
         {(() => {
           const dateText = meeting.isOneTime
             ? meeting.oneTimeDate
-            : meeting.regularDays?.length
-              ? `매주 ${meeting.regularDays.join(", ")}`
-              : "";
+            : meeting.time ||
+              (meeting.regularDays?.length
+                ? `매주 ${meeting.regularDays.join(", ")}`
+                : "");
           return dateText ? <div className="card-date">{dateText}</div> : null;
         })()}
 

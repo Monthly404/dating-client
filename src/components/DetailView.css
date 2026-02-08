@@ -97,6 +97,7 @@
   flex: 1;
   color: var(--color-primary);
   font-weight: 500;
+  white-space: pre-line;
 }
 
 .tags-container {

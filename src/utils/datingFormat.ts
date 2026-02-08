@@ -8,6 +8,7 @@ import { DAY_MAP, formatDateTime } from "./dateFormat";
  */
 export const formatDatingSchedule = (
   schedule?: DatingScheduleResponse,
+  separator: string = "\n",
 ): string => {
   if (!schedule) return "";
 
@@ -17,13 +18,64 @@ export const formatDatingSchedule = (
     // 단발성 모임: "M월 D일 (요일) HH:MM"
     const date = new Date(schedule.schedules[0]);
     return formatDateTime(date);
-  } else if (schedule.repeatSchedules) {
-    // 정기 모임: "매주 월, 수, 금 14:30"
-    const time = schedule.repeatSchedules[0]?.time?.substring(0, 5) || "";
-    const days = schedule.repeatSchedules
-      .map((s) => DAY_MAP[s.day] || s.day)
-      .join(", ");
-    return `매주 ${days} ${time}`;
+  } else if (schedule.repeatSchedules && schedule.repeatSchedules.length > 0) {
+    // 정기 모임: 요일별 시간 그룹화
+    const dayToTimes = new Map<string, string[]>();
+    const dayOrder = [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY",
+      "SUNDAY",
+    ];
+
+    // 요일 순서대로 정렬
+    const sortedSchedules = [...schedule.repeatSchedules].sort(
+      (a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
+    );
+
+    sortedSchedules.forEach((sch) => {
+      // "13:30:00" -> "13:30" or "16:00:00" -> "16"
+      const [h, m] = sch.time.split(":");
+      const hour = Number(h); // "09" -> 9, "16" -> 16
+      const time = m === "00" ? `${hour}` : `${hour}:${m}`;
+
+      if (!dayToTimes.has(sch.day)) {
+        dayToTimes.set(sch.day, []);
+      }
+      const times = dayToTimes.get(sch.day);
+      if (times && !times.includes(time)) {
+        times.push(time);
+      }
+    });
+
+    // 각 요일별 시간 정렬
+    dayToTimes.forEach((times) => times.sort());
+
+    // 시간 구성이 같은 요일끼리 그룹화
+    const timeToDays = new Map<string, string[]>();
+    dayOrder.forEach((day) => {
+      if (dayToTimes.has(day)) {
+        const times = dayToTimes.get(day);
+        const timeSignature = times!.join(", ");
+
+        if (!timeToDays.has(timeSignature)) {
+          timeToDays.set(timeSignature, []);
+        }
+        timeToDays.get(timeSignature)!.push(day);
+      }
+    });
+
+    // 문자열 생성
+    const parts: string[] = [];
+    timeToDays.forEach((days, timeSignature) => {
+      const dayString = days.map((d) => DAY_MAP[d] || d).join(", ");
+      parts.push(`매주 ${dayString} ${timeSignature}`);
+    });
+
+    return parts.join(separator);
   }
 
   return "";

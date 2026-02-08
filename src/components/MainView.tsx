@@ -13,8 +13,12 @@ import { DEFAULT_PAGE, DEFAULT_SIZE } from "../constants/search";
 import { useSearchDatingGroups } from "../queries/useDatingQueries";
 import type { DatingGroupResponse, DatingFilterParam } from "../types/dating";
 import type { Meeting } from "../types";
-import { DAY_MAP, formatDateTime, formatShortDate } from "../utils/dateFormat";
-import { formatPrice, formatTags } from "../utils/datingFormat";
+import { DAY_MAP, formatShortDate } from "../utils/dateFormat";
+import {
+  formatDatingSchedule,
+  formatPrice,
+  formatTags,
+} from "../utils/datingFormat";
 
 /** 정렬 옵션 */
 const SORT_OPTIONS = [
@@ -34,22 +38,16 @@ const transformDatingGroupToMeeting = (group: DatingGroupResponse): Meeting => {
   const isOneTime = group.schedule?.type === "INSTANT";
 
   // 시간 문자열 생성
-  let timeStr = "";
+  const timeStr = formatDatingSchedule(group.schedule, " / ");
   let oneTimeDate = "";
   let regularDays: string[] | undefined;
 
   if (isOneTime && group.schedule?.schedules?.[0]) {
-    // 단발성 모임: "M월 D일 (요일) HH:MM"
+    // 단발성 모임: "M.D(요일)" 형식만 추출 (카드 UI용)
     const date = new Date(group.schedule.schedules[0]);
-    timeStr = formatDateTime(date);
     oneTimeDate = formatShortDate(date);
   } else if (group.schedule?.repeatSchedules) {
-    // 정기 모임: "매주 월, 수, 금 14:30"
-    const time = group.schedule.repeatSchedules[0]?.time?.substring(0, 5) || "";
-    const days = group.schedule.repeatSchedules
-      .map((s) => DAY_MAP[s.day] || s.day)
-      .join(", ");
-    timeStr = `매주 ${days} ${time}`;
+    // 정기 모임: 기존 regularDays 유지 (혹시 모를 하위 호환성)
     regularDays = group.schedule.repeatSchedules.map(
       (s) => DAY_MAP[s.day] || s.day,
     );
