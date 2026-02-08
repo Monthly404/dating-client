@@ -179,7 +179,9 @@ const DetailView: React.FC = () => {
             {/* Right: Info */}
             <div className="info-section">
               <div className="info-header">
-                <span className="info-category">{locationStr}</span>
+                {locationStr && (
+                  <span className="info-category">{locationStr}</span>
+                )}
                 <h1 className="info-title" style={{ whiteSpace: "pre-line" }}>
                   {datingGroup.name}
                 </h1>
@@ -253,7 +255,7 @@ const DetailView: React.FC = () => {
                 <p>
                   {datingGroup.address?.road ||
                     datingGroup.address?.gugun ||
-                    "위치 정보 없음"}
+                    ""}
                 </p>
                 <div
                   style={{

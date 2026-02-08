@@ -134,11 +134,6 @@
 
   .info-section {
     flex: 1;
-    padding-top: var(--spacing-md);
-  }
-  .info-section {
-    flex: 1;
-    padding-top: var(--spacing-md);
   }
 }
 

@@ -35,7 +35,7 @@ export const formatDatingSchedule = (
  * @returns 포맷된 주소 문자열
  */
 export const formatLocation = (datingGroup: DatingResponse): string => {
-  if (!datingGroup.address) return "위치 정보 없음";
+  if (!datingGroup.address) return "";
   return `${datingGroup.address.sido} · ${datingGroup.address.gugun}`;
 };
 
