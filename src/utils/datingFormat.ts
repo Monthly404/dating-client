@@ -40,7 +40,7 @@ export const formatDatingSchedule = (
       // "13:30:00" -> "13:30" or "16:00:00" -> "16"
       const [h, m] = sch.time.split(":");
       const hour = Number(h); // "09" -> 9, "16" -> 16
-      const time = m === "00" ? `${hour}` : `${hour}:${m}`;
+      const time = m === "00" ? `${hour}시` : `${hour}:${m}시`;
 
       if (!dayToTimes.has(sch.day)) {
         dayToTimes.set(sch.day, []);
@@ -70,9 +70,13 @@ export const formatDatingSchedule = (
 
     // 문자열 생성
     const parts: string[] = [];
+    let isFirst = true;
+
     timeToDays.forEach((days, timeSignature) => {
       const dayString = days.map((d) => DAY_MAP[d] || d).join(", ");
-      parts.push(`매주 ${dayString} ${timeSignature}`);
+      const prefix = isFirst ? "매주 " : "";
+      parts.push(`${prefix}${dayString} ${timeSignature}`);
+      isFirst = false;
     });
 
     return parts.join(separator);
