@@ -14,6 +14,12 @@ const Header: React.FC = () => {
             className="text-logo-img"
           />
         </Link>
+        <button
+          className="header-inquiry-btn"
+          onClick={() => window.open("https://docs.google.com/forms", "_blank")}
+        >
+          문의하기
+        </button>
       </Container>
     </header>
   );

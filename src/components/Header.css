@@ -33,3 +33,16 @@
   /* If the logo is black and needs to be white, use filter or ensure png is white */
   /* filter: brightness(0) invert(1); */ /* Uncomment if logo is black and needs to be white */
 }
+
+.header-inquiry-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
