@@ -4,10 +4,12 @@ import MainView from "./components/MainView";
 import DetailView from "./components/DetailView";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import GoogleAnalytics from "./components/common/GoogleAnalytics";
 
 function App() {
   return (
     <BrowserRouter>
+      <GoogleAnalytics />
       <div className="app-container">
         <Header />
         <main className="app-main">
