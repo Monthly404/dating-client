@@ -13,6 +13,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.18",
     "@tanstack/react-query-devtools": "^5.91.2",
+    "@vis.gl/react-google-maps": "^1.7.1",
     "axios": "^1.13.2",
     "env-cmd": "^11.0.0",
     "react": "^19.2.0",

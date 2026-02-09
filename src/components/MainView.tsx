@@ -219,9 +219,7 @@ const MainView: React.FC = () => {
             {isMapView ? (
               // 지도 뷰 (추후 구현 예정)
               <div className="map-view-placeholder">
-                <div className="map-content">
-                  🗺️ 지도 뷰가 여기에 표시됩니다
-                </div>
+                <div className="map-content">지도 뷰가 여기에 표시됩니다</div>
               </div>
             ) : (
               // 목록 뷰

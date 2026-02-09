@@ -14,7 +14,7 @@ import {
   formatTags,
 } from "../utils/datingFormat";
 import { getFallbackImage } from "../utils/imageFallback";
-import KakaoMap from "./common/KakaoMap";
+import GoogleMap from "./common/GoogleMap";
 
 const DetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -232,7 +232,7 @@ const DetailView: React.FC = () => {
             <h3>오시는 길</h3>
             {datingGroup.address?.latitude && datingGroup.address?.longitude ? (
               <div style={{ marginTop: "16px" }}>
-                <KakaoMap
+                <GoogleMap
                   latitude={datingGroup.address.latitude}
                   longitude={datingGroup.address.longitude}
                 />
