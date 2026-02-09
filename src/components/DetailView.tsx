@@ -164,7 +164,15 @@ const DetailView: React.FC = () => {
       />
       <Container>
         <div className="detail-card">
-          <div className="detail-grid">
+          <div
+            className="detail-grid"
+            style={{
+              marginBottom:
+                datingGroup.address?.latitude && datingGroup.address?.longitude
+                  ? "var(--spacing-xl)"
+                  : 0,
+            }}
+          >
             <div className="visual-section">
               <div className="detail-image-wrapper">
                 <img
@@ -228,9 +236,9 @@ const DetailView: React.FC = () => {
             </div>
           </div>
 
-          <div className="map-section">
-            <h3>오시는 길</h3>
-            {datingGroup.address?.latitude && datingGroup.address?.longitude ? (
+          {datingGroup.address?.latitude && datingGroup.address?.longitude && (
+            <div className="map-section">
+              <h3>오시는 길</h3>
               <div style={{ marginTop: "16px" }}>
                 <GoogleMap
                   latitude={datingGroup.address.latitude}
@@ -250,25 +258,8 @@ const DetailView: React.FC = () => {
                   )}
                 </p>
               </div>
-            ) : (
-              <div className="map-placeholder">
-                <p>
-                  {datingGroup.address?.road ||
-                    datingGroup.address?.gugun ||
-                    ""}
-                </p>
-                <div
-                  style={{
-                    marginTop: "16px",
-                    fontSize: "0.85rem",
-                    color: "var(--color-secondary)",
-                  }}
-                >
-                  지도 정보를 불러올 수 없습니다
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </Container>
     </div>
