@@ -1,6 +1,13 @@
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import {
+  useQuery,
+  useInfiniteQuery,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { searchDatingGroups, getDatingGroup } from "../api/dating";
-import type { SearchDatingParams } from "../types/dating";
+import type {
+  SearchDatingParams,
+  DatingGroupPagingResponse,
+} from "../types/dating";
 
 export const datingKeys = {
   all: ["dating"] as const,
@@ -20,6 +27,32 @@ export const useSearchDatingGroups = (params: SearchDatingParams) => {
     queryKey: datingKeys.list(params),
     queryFn: () => searchDatingGroups(params),
     placeholderData: keepPreviousData,
+  });
+};
+
+/**
+ * 소개팅 그룹 무한 스크롤 검색 쿼리
+ */
+export const useInfiniteSearchDatingGroups = (params: SearchDatingParams) => {
+  return useInfiniteQuery({
+    queryKey: datingKeys.list(params),
+    queryFn: ({ pageParam = 1 }) =>
+      searchDatingGroups({ ...params, page: pageParam as number }),
+    initialPageParam: 1,
+    getNextPageParam: (
+      lastPage: DatingGroupPagingResponse,
+      allPages: DatingGroupPagingResponse[],
+    ) => {
+      const nextPage = allPages.length + 1;
+      const totalCount = lastPage.totalCount;
+      const size = params.size || 20;
+
+      // 더 이상 불러올 데이터가 없으면 undefined 반환
+      if ((nextPage - 1) * size >= totalCount) {
+        return undefined;
+      }
+      return nextPage;
+    },
   });
 };
 

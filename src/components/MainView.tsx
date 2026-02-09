@@ -9,8 +9,9 @@ import { Container } from "./common/Container";
 import { Select } from "./common/Select";
 import "./MainView.css";
 import { HERO_SLIDES } from "../constants";
-import { DEFAULT_PAGE, DEFAULT_SIZE } from "../constants/search";
-import { useSearchDatingGroups } from "../queries/useDatingQueries";
+import { DEFAULT_SIZE } from "../constants/search";
+import { useInfiniteSearchDatingGroups } from "../queries/useDatingQueries";
+import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import type { DatingGroupResponse, DatingFilterParam } from "../types/dating";
 import type { Meeting } from "../types";
 import { DAY_MAP, formatShortDate } from "../utils/dateFormat";
@@ -85,17 +86,30 @@ const MainView: React.FC = () => {
   /** 정렬 방식 */
   const [sortBy, setSortBy] = useState<"RECOMMEND" | "LATEST">("RECOMMEND");
 
-  /** 소개팅 모임 목록 조회 */
-  const { data: pagingData, isLoading } = useSearchDatingGroups({
+  /** 소개팅 모임 목록 조회 (무한 스크롤) */
+  const {
+    data: pagingData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteSearchDatingGroups({
     sort: sortBy,
-    page: DEFAULT_PAGE,
     size: DEFAULT_SIZE,
     filters: filters,
   });
 
-  /** API 응답을 UI용 Meeting 배열로 변환 */
+  /** 무한 스크롤 감지 */
+  const { targetRef } = useIntersectionObserver({
+    onIntersect: fetchNextPage,
+    enabled: !!hasNextPage && !isFetchingNextPage,
+  });
+
+  /** API 응답을 UI용 Meeting 배열로 변환 (Pages Flattening) */
   const meetings: Meeting[] =
-    pagingData?.datings?.map(transformDatingGroupToMeeting) || [];
+    pagingData?.pages.flatMap((page) =>
+      page.datings.map(transformDatingGroupToMeeting),
+    ) || [];
 
   /** 히어로 캐러셀 자동 전환 */
   useEffect(() => {
@@ -219,15 +233,35 @@ const MainView: React.FC = () => {
                     ))}
                   </div>
                 ) : meetings.length > 0 ? (
-                  <div className="meeting-grid">
-                    {meetings.map((meeting) => (
-                      <MeetingCard
-                        key={meeting.id}
-                        meeting={meeting}
-                        onClick={() => handleCardClick(meeting.id)}
-                      />
-                    ))}
-                  </div>
+                  <>
+                    <div className="meeting-grid">
+                      {meetings.map((meeting) => (
+                        <MeetingCard
+                          key={meeting.id}
+                          meeting={meeting}
+                          onClick={() => handleCardClick(meeting.id)}
+                        />
+                      ))}
+                    </div>
+                    {/* 무한 스크롤 감지 영역 */}
+                    <div
+                      ref={targetRef}
+                      style={{
+                        height: "20px",
+                        marginTop: "20px",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {isFetchingNextPage && (
+                        <div className="loading-dots">
+                          <span>.</span>
+                          <span>.</span>
+                          <span>.</span>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 ) : (
                   <EmptyState />
                 )}
