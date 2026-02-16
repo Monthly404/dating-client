@@ -144,10 +144,6 @@ export interface DatingPagingResponse {
   datings: DatingResponse[];
 }
 
-// Legacy type aliases for backward compatibility
-export type DatingGroupResponse = DatingResponse;
-export type DatingGroupPagingResponse = DatingPagingResponse;
-
 export interface CommonResponse<T> {
   message: string;
   data: T | null;
