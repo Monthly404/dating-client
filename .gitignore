@@ -25,3 +25,8 @@ dist-ssr
 
 # Allow .agent folder for Rules and Workflows
 !.agent/
+
+# Claude Code
+.claude/*
+!.claude/CLAUDE.md
+.omc/
