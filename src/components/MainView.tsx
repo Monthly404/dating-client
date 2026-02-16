@@ -12,7 +12,7 @@ import { HERO_SLIDES } from "../constants";
 import { DEFAULT_SIZE } from "../constants/search";
 import { useInfiniteSearchDatingGroups } from "../queries/useDatingQueries";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
-import type { DatingGroupResponse, DatingFilterParam } from "../types/dating";
+import type { DatingResponse, DatingFilterParam } from "../types/dating";
 import type { Meeting } from "../types";
 import { DAY_MAP, formatShortDate } from "../utils/dateFormat";
 import {
@@ -35,7 +35,7 @@ const CAROUSEL_INTERVAL = 5000;
  * @param group API 응답 데이터
  * @returns Meeting 객체
  */
-const transformDatingGroupToMeeting = (group: DatingGroupResponse): Meeting => {
+const transformDatingGroupToMeeting = (group: DatingResponse): Meeting => {
   const isOneTime = group.schedule?.type === "INSTANT";
 
   // 시간 문자열 생성
@@ -171,14 +171,7 @@ const MainView: React.FC = () => {
         {/* 컨텐츠 섹션 */}
         <section className="content-section">
           {/* 섹션 헤더 */}
-          <div
-            className="section-header"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <div className="section-header">
             <h2>전체 모임</h2>
             <Select
               options={SORT_OPTIONS}
@@ -223,7 +216,7 @@ const MainView: React.FC = () => {
               </div>
             ) : (
               // 목록 뷰
-              <div style={{ flex: 1, width: "100%" }}>
+              <div className="list-container">
                 {isLoading ? (
                   <div className="meeting-grid">
                     {Array.from({ length: 6 }).map((_, i) => (
@@ -242,15 +235,7 @@ const MainView: React.FC = () => {
                       ))}
                     </div>
                     {/* 무한 스크롤 감지 영역 */}
-                    <div
-                      ref={targetRef}
-                      style={{
-                        height: "20px",
-                        marginTop: "20px",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
+                    <div ref={targetRef} className="scroll-sentinel">
                       {isFetchingNextPage && (
                         <div className="loading-dots">
                           <span>.</span>

@@ -1,7 +1,8 @@
 import React from "react";
 import "./MeetingCard.css";
 import type { Meeting } from "../types";
-import { getFallbackImage } from "../utils/imageFallback";
+import { getFallbackImage, handleImageError } from "../utils/imageFallback";
+import { Tag } from "./common/Tag";
 
 interface MeetingCardProps {
   meeting: Meeting;
@@ -9,21 +10,25 @@ interface MeetingCardProps {
 }
 
 const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
-  /** 이미지 로드 실패 시 폴백 이미지로 대체 */
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>,
-  ) => {
-    e.currentTarget.src = getFallbackImage(meeting.id);
-  };
-
   return (
-    <div className="meeting-card" onClick={onClick}>
+    <div
+      className="meeting-card"
+      role="button"
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+    >
       <div className="card-image-wrapper">
         <img
           src={meeting.image || getFallbackImage(meeting.id)}
           alt={meeting.title}
           className="card-image"
-          onError={handleImageError}
+          onError={(e) => handleImageError(e, meeting.id)}
         />
         {meeting.location && (
           <div className="card-location-overlay">{meeting.location}</div>
@@ -49,7 +54,7 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
         {meeting.tags && meeting.tags.length > 0 && (
           <div className="card-tags">
             {meeting.tags.map((tag, index) => (
-              <span key={index}>{tag}</span>
+              <Tag key={index}>{tag}</Tag>
             ))}
           </div>
         )}

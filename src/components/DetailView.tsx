@@ -13,7 +13,8 @@ import {
   formatPrice,
   formatTags,
 } from "../utils/datingFormat";
-import { getFallbackImage } from "../utils/imageFallback";
+import { getFallbackImage, handleImageError } from "../utils/imageFallback";
+import { Tag } from "./common/Tag";
 import GoogleMap from "./common/GoogleMap";
 
 const DetailView: React.FC = () => {
@@ -25,12 +26,7 @@ const DetailView: React.FC = () => {
     isError,
   } = useGetDatingGroup(Number(id));
 
-  /** 이미지 로드 실패 시 폴백 이미지로 대체 */
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>,
-  ) => {
-    e.currentTarget.src = getFallbackImage(Number(id));
-  };
+  const numericId = Number(id);
 
   // 페이지 로드 시 최상단으로 스크롤
   useEffect(() => {
@@ -165,21 +161,19 @@ const DetailView: React.FC = () => {
       <Container>
         <div className="detail-card">
           <div
-            className="detail-grid"
-            style={{
-              marginBottom:
-                datingGroup.address?.latitude && datingGroup.address?.longitude
-                  ? "var(--spacing-xl)"
-                  : 0,
-            }}
+            className={`detail-grid ${
+              !(datingGroup.address?.latitude && datingGroup.address?.longitude)
+                ? "detail-grid--no-map"
+                : ""
+            }`}
           >
             <div className="visual-section">
               <div className="detail-image-wrapper">
                 <img
-                  src={datingGroup.thumbnail || getFallbackImage(Number(id))}
+                  src={datingGroup.thumbnail || getFallbackImage(numericId)}
                   alt={datingGroup.name}
                   className="detail-image"
-                  onError={handleImageError}
+                  onError={(e) => handleImageError(e, numericId)}
                 />
               </div>
             </div>
@@ -214,9 +208,7 @@ const DetailView: React.FC = () => {
 
                 <div className="tags-container">
                   {tags.map((tag, index) => (
-                    <span key={index} className="tag-chip">
-                      {tag}
-                    </span>
+                    <Tag key={index}>{tag}</Tag>
                   ))}
                 </div>
               </div>
@@ -239,25 +231,18 @@ const DetailView: React.FC = () => {
           {datingGroup.address?.latitude && datingGroup.address?.longitude && (
             <div className="map-section">
               <h3>오시는 길</h3>
-              <div style={{ marginTop: "16px" }}>
-                <GoogleMap
-                  latitude={datingGroup.address.latitude}
-                  longitude={datingGroup.address.longitude}
-                />
-                <p style={{ marginTop: "12px", fontSize: "0.95rem" }}>
-                  {datingGroup.address.road || datingGroup.address.gugun}
-                  {datingGroup.address.detail && (
-                    <span
-                      style={{
-                        color: "var(--color-secondary)",
-                        marginLeft: "8px",
-                      }}
-                    >
-                      {datingGroup.address.detail}
-                    </span>
-                  )}
-                </p>
-              </div>
+              <GoogleMap
+                latitude={datingGroup.address.latitude}
+                longitude={datingGroup.address.longitude}
+              />
+              <p className="map-address">
+                {datingGroup.address.road || datingGroup.address.gugun}
+                {datingGroup.address.detail && (
+                  <span className="map-address-detail">
+                    {datingGroup.address.detail}
+                  </span>
+                )}
+              </p>
             </div>
           )}
         </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
+import "./GoogleMap.css";
 
 interface GoogleMapProps {
   latitude: number;
@@ -16,33 +17,14 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
 
   if (!apiKey) {
     return (
-      <div
-        style={{
-          width: "100%",
-          height,
-          borderRadius: "16px",
-          backgroundColor: "#f1f3f5",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#868e96",
-          fontSize: "0.9rem",
-        }}
-      >
+      <div className="google-map-placeholder" style={{ height }}>
         API 키가 설정되지 않았습니다.
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height,
-        borderRadius: "16px",
-        overflow: "hidden",
-      }}
-    >
+    <div className="google-map-container" style={{ height }}>
       <APIProvider apiKey={apiKey}>
         <Map
           defaultCenter={{ lat: latitude, lng: longitude }}

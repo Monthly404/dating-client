@@ -1,12 +1,8 @@
-import {
-  useQuery,
-  useInfiniteQuery,
-  keepPreviousData,
-} from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { searchDatingGroups, getDatingGroup } from "../api/dating";
 import type {
   SearchDatingParams,
-  DatingGroupPagingResponse,
+  DatingPagingResponse,
 } from "../types/dating";
 
 export const datingKeys = {
@@ -19,18 +15,6 @@ export const datingKeys = {
 };
 
 /**
- * 소개팅 그룹 검색 쿼리
- * POST /api/datings/search
- */
-export const useSearchDatingGroups = (params: SearchDatingParams) => {
-  return useQuery({
-    queryKey: datingKeys.list(params),
-    queryFn: () => searchDatingGroups(params),
-    placeholderData: keepPreviousData,
-  });
-};
-
-/**
  * 소개팅 그룹 무한 스크롤 검색 쿼리
  */
 export const useInfiniteSearchDatingGroups = (params: SearchDatingParams) => {
@@ -40,8 +24,8 @@ export const useInfiniteSearchDatingGroups = (params: SearchDatingParams) => {
       searchDatingGroups({ ...params, page: pageParam as number }),
     initialPageParam: 1,
     getNextPageParam: (
-      lastPage: DatingGroupPagingResponse,
-      allPages: DatingGroupPagingResponse[],
+      lastPage: DatingPagingResponse,
+      allPages: DatingPagingResponse[],
     ) => {
       const nextPage = allPages.length + 1;
       const totalCount = lastPage.totalCount;

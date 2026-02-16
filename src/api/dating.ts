@@ -1,8 +1,8 @@
 import api from "./axios";
 import type {
   CommonResponse,
-  DatingGroupPagingResponse,
-  DatingGroupResponse,
+  DatingPagingResponse,
+  DatingResponse,
   SearchDatingParams,
 } from "../types/dating";
 
@@ -12,8 +12,8 @@ import type {
  */
 export const searchDatingGroups = async (
   params: SearchDatingParams,
-): Promise<DatingGroupPagingResponse> => {
-  const { data } = await api.post<CommonResponse<DatingGroupPagingResponse>>(
+): Promise<DatingPagingResponse> => {
+  const { data } = await api.post<CommonResponse<DatingPagingResponse>>(
     "/datings/search",
     params,
   );
@@ -31,8 +31,8 @@ export const searchDatingGroups = async (
  */
 export const getDatingGroup = async (
   datingId: number,
-): Promise<DatingGroupResponse> => {
-  const { data } = await api.get<CommonResponse<DatingGroupResponse>>(
+): Promise<DatingResponse> => {
+  const { data } = await api.get<CommonResponse<DatingResponse>>(
     `/datings/${datingId}`,
   );
 

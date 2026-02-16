@@ -9,6 +9,7 @@ import {
   MEETING_CONCEPTS,
 } from "../constants";
 import { ChipGroup } from "./common/ChipGroup";
+import { getTodayString, getOneMonthLaterString } from "../utils/dateFormat";
 import type { DatingFilterParam, DayOfWeek, TimeRange } from "../types/dating";
 
 interface FilterSectionProps {
@@ -49,29 +50,6 @@ const PRICE_STEP = 10000;
 
 /** 데스크톱 브레이크포인트 */
 const DESKTOP_BREAKPOINT = 768;
-
-/**
- * 오늘 날짜를 YYYY-MM-DD 형식으로 반환
- */
-const getTodayString = (): string => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-    2,
-    "0",
-  )}-${String(d.getDate()).padStart(2, "0")}`;
-};
-
-/**
- * 1개월 후 날짜를 YYYY-MM-DD 형식으로 반환
- */
-const getOneMonthLaterString = (): string => {
-  const d = new Date();
-  d.setMonth(d.getMonth() + 1);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-    2,
-    "0",
-  )}-${String(d.getDate()).padStart(2, "0")}`;
-};
 
 const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
   /** 모바일에서 필터 모달 열림 여부 */
@@ -355,7 +333,11 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
         {/* 헤더 */}
         <div className="filter-header">
           <h3>필터</h3>
-          <button className="close-filter-btn" onClick={() => setIsOpen(false)}>
+          <button
+            className="close-filter-btn"
+            onClick={() => setIsOpen(false)}
+            aria-label="필터 닫기"
+          >
             ✕
           </button>
         </div>
