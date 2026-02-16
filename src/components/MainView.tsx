@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
@@ -73,9 +73,6 @@ const transformDatingGroupToMeeting = (group: DatingResponse): Meeting => {
 
 const MainView: React.FC = () => {
   const navigate = useNavigate();
-
-  /** 지도 뷰 활성화 여부 */
-  const [isMapView, setIsMapView] = useState(false);
 
   /** 현재 히어로 슬라이드 인덱스 */
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -186,70 +183,45 @@ const MainView: React.FC = () => {
 
           {/* 레이아웃: 사이드바 + 메인 컨텐츠 */}
           <div className="content-layout">
-            {/* 사이드바: 뷰 전환 + 필터 */}
+            {/* 사이드바: 필터 */}
             <aside className="sidebar">
-              {/* 목록/지도 뷰 토글 */}
-              <div className="view-toggle-container">
-                <button
-                  className={`view-toggle-btn ${!isMapView ? "active" : ""}`}
-                  onClick={() => setIsMapView(false)}
-                >
-                  목록
-                </button>
-                <button
-                  className={`view-toggle-btn ${isMapView ? "active" : ""}`}
-                  onClick={() => setIsMapView(true)}
-                >
-                  지도
-                </button>
-              </div>
-
-              {/* 필터 섹션 */}
               <FilterSection onApply={handleApplyFilters} />
             </aside>
 
-            {/* 메인 컨텐츠: 지도 뷰 또는 목록 뷰 */}
-            {isMapView ? (
-              // 지도 뷰 (추후 구현 예정)
-              <div className="map-view-placeholder">
-                <div className="map-content">지도 뷰가 여기에 표시됩니다</div>
-              </div>
-            ) : (
-              // 목록 뷰
-              <div className="list-container">
-                {isLoading ? (
+            {/* 목록 뷰 */}
+            <div className="list-container">
+              {isLoading ? (
+                <div className="meeting-grid">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <MeetingCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : meetings.length > 0 ? (
+                <>
                   <div className="meeting-grid">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <MeetingCardSkeleton key={i} />
+                    {meetings.map((meeting) => (
+                      <MeetingCard
+                        key={meeting.id}
+                        meeting={meeting}
+                        onClick={() => handleCardClick(meeting.id)}
+                      />
                     ))}
                   </div>
-                ) : meetings.length > 0 ? (
-                  <>
-                    <div className="meeting-grid">
-                      {meetings.map((meeting) => (
-                        <MeetingCard
-                          key={meeting.id}
-                          meeting={meeting}
-                          onClick={() => handleCardClick(meeting.id)}
-                        />
-                      ))}
-                    </div>
-                    {/* 무한 스크롤 감지 영역 */}
-                    <div ref={targetRef} className="scroll-sentinel">
-                      {isFetchingNextPage && (
-                        <div className="loading-dots">
-                          <span>.</span>
-                          <span>.</span>
-                          <span>.</span>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                ) : (
-                  <EmptyState />
-                )}
-              </div>
-            )}
+                  {/* 무한 스크롤 감지 영역 */}
+                  <div ref={targetRef} className="scroll-sentinel">
+                    {isFetchingNextPage && (
+                      <div className="loading-dots">
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <EmptyState />
+              )}
+            </div>
           </div>
         </section>
       </Container>
