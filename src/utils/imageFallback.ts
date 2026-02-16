@@ -21,3 +21,13 @@ export const getFallbackImage = (id?: number): string => {
   // ID가 음수일 경우를 대비해 절대값 사용
   return FALLBACK_IMAGES[Math.abs(id) % FALLBACK_IMAGES.length];
 };
+
+/**
+ * 이미지 로드 실패 시 폴백 이미지로 대체하는 핸들러
+ */
+export const handleImageError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  id: number,
+) => {
+  e.currentTarget.src = getFallbackImage(id);
+};

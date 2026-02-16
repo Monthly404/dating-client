@@ -9,6 +9,17 @@ export const DAY_MAP: Record<string, string> = {
   SUNDAY: "일",
 };
 
+/** 한글 요일을 영문으로 변환하는 역맵 */
+export const KOREAN_DAY_MAP: Record<string, string> = {
+  월: "MONDAY",
+  화: "TUESDAY",
+  수: "WEDNESDAY",
+  목: "THURSDAY",
+  금: "FRIDAY",
+  토: "SATURDAY",
+  일: "SUNDAY",
+};
+
 /**
  * Date 객체에서 요일 인덱스를 가져와 한글 요일로 변환
  * @param date Date 객체
@@ -54,4 +65,21 @@ export const formatShortDate = (date: Date): string => {
   const day = date.getDate();
   const koreanDay = getKoreanDay(date);
   return `${month}.${day}(${koreanDay})`;
+};
+
+/**
+ * 오늘 날짜를 YYYY-MM-DD 형식으로 반환
+ */
+export const getTodayString = (): string => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+
+/**
+ * 1개월 후 날짜를 YYYY-MM-DD 형식으로 반환
+ */
+export const getOneMonthLaterString = (): string => {
+  const d = new Date();
+  d.setMonth(d.getMonth() + 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
