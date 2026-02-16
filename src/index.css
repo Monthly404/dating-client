@@ -29,6 +29,18 @@
   /* Layout */
   --container-width: 1140px;
   --header-height: 64px;
+
+  /* Design Tokens */
+  --color-skeleton-base: #f0f0f0;
+  --color-skeleton-shine: #e0e0e0;
+  --color-bg-light: #e9ecef;
+  --color-text-disabled: #999;
+  --color-border-light: #ddd;
+  --color-scrollbar: #dbdbdb;
+  --color-scrollbar-hover: #bababa;
+  --color-map-bg: #f1f3f5;
+  --color-map-text: #868e96;
+  --color-accent-hover: #ff334b;
 }
 
 .container {
@@ -94,9 +106,9 @@ a {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #dbdbdb;
+  background: var(--color-scrollbar);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #bababa;
+  background: var(--color-scrollbar-hover);
 }

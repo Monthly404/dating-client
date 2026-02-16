@@ -1,0 +1,16 @@
+.google-map-container {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.google-map-placeholder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-map-bg);
+  border-radius: var(--radius-md);
+  color: var(--color-map-text);
+  font-size: 0.9rem;
+}

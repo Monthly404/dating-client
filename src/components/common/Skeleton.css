@@ -1,13 +1,13 @@
 /* Skeleton Loader Animation */
 @keyframes skeleton-loading {
   0% {
-    background-color: #f0f0f0;
+    background-color: var(--color-skeleton-base);
   }
   50% {
-    background-color: #e0e0e0;
+    background-color: var(--color-skeleton-shine);
   }
   100% {
-    background-color: #f0f0f0;
+    background-color: var(--color-skeleton-base);
   }
 }
 

@@ -219,7 +219,7 @@
 }
 
 .district-btn:hover {
-  background: #e9ecef;
+  background: var(--color-bg-light);
 }
 
 .district-btn.active {
@@ -348,15 +348,15 @@
 }
 
 .apply-filter-btn:disabled {
-  background-color: #ddd;
-  color: #999;
+  background-color: var(--color-border-light);
+  color: var(--color-text-disabled);
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
 }
 
 .apply-filter-btn:not(:disabled):hover {
-  background-color: #ff334b;
+  background-color: var(--color-accent-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(255, 68, 85, 0.3);
 }

@@ -121,11 +121,8 @@
   margin-top: auto;
 }
 
-.card-tags span {
+.card-tags .ds-tag {
   font-size: 0.75rem;
-  color: var(--color-secondary);
-  background-color: var(--color-bg);
   padding: 4px 10px;
   border-radius: 6px;
-  font-weight: 500;
 }
