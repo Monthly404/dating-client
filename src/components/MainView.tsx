@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
@@ -123,9 +123,21 @@ const MainView: React.FC = () => {
     navigate(`/meeting/${id}`);
   };
 
-  /** 필터 적용 시 필터 상태 업데이트 */
+  /** 컨텐츠 섹션 ref */
+  const contentSectionRef = useRef<HTMLElement>(null);
+
+  /** 필터 적용 시 필터 상태 업데이트 + 스크롤 이동 */
   const handleApplyFilters = (newFilters: DatingFilterParam[]) => {
     setFilters(newFilters);
+    requestAnimationFrame(() => {
+      if (contentSectionRef.current) {
+        const top =
+          contentSectionRef.current.getBoundingClientRect().top +
+          window.scrollY -
+          80;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    });
   };
 
   return (
@@ -167,7 +179,7 @@ const MainView: React.FC = () => {
         </section>
 
         {/* 컨텐츠 섹션 */}
-        <section className="content-section">
+        <section className="content-section" ref={contentSectionRef}>
           {/* 섹션 헤더 */}
           <div className="section-header">
             <h2>전체 모임</h2>
