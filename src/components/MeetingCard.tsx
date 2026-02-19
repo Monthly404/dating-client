@@ -30,6 +30,9 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
           className="card-image"
           onError={(e) => handleImageError(e, meeting.id)}
         />
+        {meeting.company && (
+          <div className="card-company-overlay">{meeting.company}</div>
+        )}
         {meeting.location && (
           <div className="card-location-overlay">{meeting.location}</div>
         )}
