@@ -154,8 +154,46 @@ const DetailView: React.FC = () => {
     <div className="detail-page">
       <SEO
         title={datingGroup.name}
-        description={`${locationStr}에서 진행되는 ${datingGroup.name}입니다.`}
+        description={`${locationStr}에서 진행되는 ${datingGroup.name}. ${priceStr}, ${ageGroupStr}. ${timeStr || ""}`}
         image={datingGroup.thumbnail}
+        url={`${window.location.origin}/meeting/${id}`}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Event",
+          name: datingGroup.name,
+          description: `${locationStr}에서 진행되는 ${datingGroup.name}`,
+          image: datingGroup.thumbnail,
+          url: `${window.location.origin}/meeting/${id}`,
+          ...(datingGroup.schedule?.schedules?.[0] && {
+            startDate: datingGroup.schedule.schedules[0],
+          }),
+          ...(datingGroup.address && {
+            location: {
+              "@type": "Place",
+              name: locationStr,
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: datingGroup.address.gugun || "",
+                streetAddress: datingGroup.address.road || "",
+                addressCountry: "KR",
+              },
+            },
+          }),
+          ...(datingGroup.vendor?.name && {
+            organizer: {
+              "@type": "Organization",
+              name: datingGroup.vendor.name,
+            },
+          }),
+          ...(datingGroup.price != null && {
+            offers: {
+              "@type": "Offer",
+              price: datingGroup.price,
+              priceCurrency: "KRW",
+              availability: "https://schema.org/InStock",
+            },
+          }),
+        }}
       />
       <Container>
         <div className="detail-card">
