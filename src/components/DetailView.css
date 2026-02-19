@@ -58,6 +58,8 @@
   letter-spacing: 0.05em;
 }
 
+
+
 .info-title {
   font-size: 2.2rem; /* Much larger for impact */
   line-height: 1.2;
@@ -107,7 +109,7 @@
 }
 
 .map-section {
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
 }
 
 .map-section h3 {
@@ -121,12 +123,21 @@
 
 .map-address {
   margin-top: 12px;
+  margin-bottom: 4px;
   font-size: 0.95rem;
 }
 
 .map-address-detail {
   color: var(--color-secondary);
   margin-left: 8px;
+}
+
+.map-notice {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: var(--color-secondary);
+  opacity: 0.6;
+  font-style: italic;
 }
 
 @media (min-width: 768px) {

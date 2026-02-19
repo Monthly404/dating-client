@@ -1,5 +1,5 @@
-import React from "react";
-import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
+import React, { useEffect } from "react";
+import { APIProvider, Map, useMap } from "@vis.gl/react-google-maps";
 import "./GoogleMap.css";
 
 interface GoogleMapProps {
@@ -7,6 +7,34 @@ interface GoogleMapProps {
   longitude: number;
   height?: string;
 }
+
+const CircleOverlay: React.FC<{ latitude: number; longitude: number }> = ({
+  latitude,
+  longitude,
+}) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+
+    const circle = new google.maps.Circle({
+      map,
+      center: { lat: latitude, lng: longitude },
+      radius: 200,
+      fillColor: "#4285F4",
+      fillOpacity: 0.15,
+      strokeColor: "#4285F4",
+      strokeOpacity: 0.4,
+      strokeWeight: 2,
+    });
+
+    return () => {
+      circle.setMap(null);
+    };
+  }, [map, latitude, longitude]);
+
+  return null;
+};
 
 const GoogleMap: React.FC<GoogleMapProps> = ({
   latitude,
@@ -34,7 +62,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
           style={{ width: "100%", height: "100%" }}
           colorScheme="LIGHT"
         >
-          <Marker position={{ lat: latitude, lng: longitude }} />
+          <CircleOverlay latitude={latitude} longitude={longitude} />
         </Map>
       </APIProvider>
     </div>

@@ -146,7 +146,8 @@ const DetailView: React.FC = () => {
   const timeStr = formatDatingSchedule(datingGroup.schedule);
   const locationStr = formatLocation(datingGroup);
   const priceStr = formatPrice(datingGroup.price);
-  const ageGroupStr = formatAgeGroup(datingGroup.minAge, datingGroup.maxAge) || "연령 제한 없음";
+  const ageGroupStr =
+    formatAgeGroup(datingGroup.minAge, datingGroup.maxAge) || "연령 제한 없음";
   const tags = formatTags(datingGroup);
 
   return (
@@ -241,8 +242,12 @@ const DetailView: React.FC = () => {
                   </span>
                 )}
               </p>
+              <p className="map-notice">
+                정확한 모임 장소는 상세 정보 확인하기 버튼을 눌러 확인하세요.
+              </p>
             </div>
           )}
+
         </div>
       </Container>
     </div>
