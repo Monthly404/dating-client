@@ -8,6 +8,7 @@ import { Button } from "./common/Button";
 import EmptyState from "./common/EmptyState";
 import { useGetDatingGroup } from "../queries/useDatingQueries";
 import {
+  formatAgeGroup,
   formatDatingSchedule,
   formatLocation,
   formatPrice,
@@ -145,10 +146,7 @@ const DetailView: React.FC = () => {
   const timeStr = formatDatingSchedule(datingGroup.schedule);
   const locationStr = formatLocation(datingGroup);
   const priceStr = formatPrice(datingGroup.price);
-  const ageGroupStr =
-    datingGroup.ageRange && datingGroup.ageRange.length >= 2
-      ? `${datingGroup.ageRange[0]}~${datingGroup.ageRange[1]}세`
-      : "연령 제한 없음";
+  const ageGroupStr = formatAgeGroup(datingGroup.minAge, datingGroup.maxAge) || "연령 제한 없음";
   const tags = formatTags(datingGroup);
 
   return (

@@ -16,6 +16,7 @@ import type { DatingResponse, DatingFilterParam } from "../types/dating";
 import type { Meeting } from "../types";
 import { DAY_MAP, formatShortDate } from "../utils/dateFormat";
 import {
+  formatAgeGroup,
   formatDatingSchedule,
   formatPrice,
   formatTags,
@@ -63,7 +64,7 @@ const transformDatingGroupToMeeting = (group: DatingResponse): Meeting => {
     price: formatPrice(group.price),
     tags: formatTags(group),
     time: timeStr,
-    ageGroup: group.ageRange ? `${group.ageRange[0]}~${group.ageRange[1]}` : "",
+    ageGroup: formatAgeGroup(group.minAge, group.maxAge),
     company: group.vendor?.name || "",
     isOneTime,
     regularDays,
