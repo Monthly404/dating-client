@@ -106,6 +106,10 @@
   margin-top: var(--spacing-lg);
 }
 
+.map-section {
+  margin-top: var(--spacing-lg);
+}
+
 .map-section h3 {
   margin-bottom: var(--spacing-md);
   font-size: 1.4rem;
