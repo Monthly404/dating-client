@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 9090,
-    host: "127.0.0.1", // DNS 지연 방지
+    host: "127.0.0.1",
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
   },
 });
