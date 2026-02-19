@@ -107,6 +107,22 @@ export const formatPrice = (price?: number): string => {
 };
 
 /**
+ * 연령대 정보를 포맷팅
+ * 예: minAge=25, maxAge=35 → "20대~30대"
+ * 예: minAge=20, maxAge=29 → "20대"
+ */
+export const formatAgeGroup = (minAge?: number, maxAge?: number): string => {
+  if (!minAge || !maxAge) return "";
+  const minDecade = Math.floor(minAge / 10) * 10;
+  const maxDecade = Math.floor(maxAge / 10) * 10;
+  const decades: string[] = [];
+  for (let d = minDecade; d <= maxDecade; d += 10) {
+    decades.push(`${d}대`);
+  }
+  return decades.join(", ");
+};
+
+/**
  * 태그 정보를 포맷팅
  * @param datingGroup 소개팅 그룹 정보
  * @returns 포맷된 태그 배열

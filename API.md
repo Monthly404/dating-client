@@ -262,22 +262,24 @@
 | apply     | `PeriodResponse`         | 신청 기간 (nullable)         |
 | schedule  | `DatingScheduleResponse` | 일정 정보 (nullable)         |
 | price     | `Integer`                | 참가 비용 (nullable)         |
-| ageRange  | `List<Integer>`          | 연령대 범위 (nullable)       |
+| minAge    | `Integer`                | 최소 나이 (nullable)         |
+| maxAge    | `Integer`                | 최대 나이 (nullable)         |
 | headCount | `Integer`                | 모집 인원 (nullable)         |
 | tags      | `List<TagResponse>`      | 태그 목록                    |
 | vendor    | `VendorProfileResponse`  | 주최자 정보 (nullable)       |
 
 **AddressResponse 필드:**
 
-| 필드      | 타입     | 설명      |
-| --------- | -------- | --------- |
-| sido      | `String` | 시/도     |
-| gugun     | `String` | 구/군     |
-| dong      | `String` | 동        |
-| road      | `String` | 도로명    |
-| detail    | `String` | 상세 주소 |
-| latitude  | `Double` | 위도      |
-| longitude | `Double` | 경도      |
+| 필드        | 타입     | 설명              |
+| ----------- | -------- | ----------------- |
+| fullAddress | `String` | 전체 주소         |
+| sido        | `String` | 시/도             |
+| gugun       | `String` | 구/군             |
+| dong        | `String` | 동 (nullable)     |
+| road        | `String` | 도로명 (nullable) |
+| detail      | `String` | 상세 주소         |
+| latitude    | `Double` | 위도              |
+| longitude   | `Double` | 경도              |
 
 **PeriodResponse 필드:**
 
@@ -330,6 +332,7 @@
         "thumbnail": "https://example.com/thumbnail.jpg",
         "link": "https://example.com/dating/123",
         "address": {
+          "fullAddress": "서울특별시 강남구 역삼동 테헤란로 123번지",
           "sido": "서울특별시",
           "gugun": "강남구",
           "dong": "역삼동",
@@ -347,7 +350,8 @@
           "schedules": ["2026-01-25T19:00:00", "2026-02-01T19:00:00"]
         },
         "price": 80000,
-        "ageRange": [25, 35],
+        "minAge": 25,
+        "maxAge": 35,
         "headCount": 20,
         "tags": [
           {
@@ -371,6 +375,7 @@
         "thumbnail": null,
         "link": "https://example.com/dating/456",
         "address": {
+          "fullAddress": "경기도 수원시 팔달구 효원로 456번지",
           "sido": "경기도",
           "gugun": "수원시",
           "dong": "팔달구",
@@ -397,7 +402,8 @@
           ]
         },
         "price": 30000,
-        "ageRange": [20, 40],
+        "minAge": 20,
+        "maxAge": 40,
         "headCount": 10,
         "tags": [
           {
@@ -569,6 +575,7 @@ GET /api/datings/1
     "thumbnail": "https://s3.amazonaws.com/bucket/thumbnail.jpg",
     "link": "https://example.com/dating/1",
     "address": {
+      "fullAddress": "서울특별시 강남구 역삼동 테헤란로 123번지",
       "sido": "서울특별시",
       "gugun": "강남구",
       "dong": "역삼동",
@@ -586,7 +593,8 @@ GET /api/datings/1
       "schedules": ["2026-01-25T19:00:00"]
     },
     "price": 80000,
-    "ageRange": [25, 35],
+    "minAge": 25,
+    "maxAge": 35,
     "headCount": 20,
     "tags": [
       {

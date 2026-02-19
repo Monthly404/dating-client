@@ -88,6 +88,7 @@ export interface SearchDatingParams {
 }
 
 export interface AddressResponse {
+  fullAddress: string;
   sido: string;
   gugun: string;
   dong: string;
@@ -133,7 +134,8 @@ export interface DatingResponse {
   apply?: PeriodResponse;
   schedule?: DatingScheduleResponse;
   price?: number;
-  ageRange?: number[];
+  minAge?: number;
+  maxAge?: number;
   headCount?: number;
   tags?: TagResponse[];
   vendor?: VendorProfileResponse;
