@@ -3,7 +3,7 @@ import heroHiking from "../assets/hero_hiking.png";
 import heroCoffee from "../assets/hero_coffee.png";
 import type { SlideData } from "../types";
 
-export const SEOUL_DISTRICTS = ["강남구", "서초구", "송파구", "마포구", "기타"];
+export const SEOUL_DISTRICTS = ["강남구", "서초구", "송파구", "마포구", "그 외"];
 
 export const DAYS_OF_WEEK = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -15,10 +15,10 @@ export const SEOUL_DISTRICT_CODES: Record<string, string> = {
   서초구: "11650",
   송파구: "11710",
   마포구: "11440",
-  기타: "00000", // 기타는 특수 코드 (exclude 로직에서 처리)
+  "그 외": "00000", // 그 외는 특수 코드 (exclude 로직에서 처리)
 };
 
-/** 주요 4개 구의 행정동 코드 (기타 선택 시 exclude에 사용) */
+/** 주요 4개 구의 행정동 코드 (그 외 선택 시 exclude에 사용) */
 export const MAIN_DISTRICT_CODES = ["11680", "11650", "11710", "11440"];
 
 export const MEETING_CONCEPTS = [

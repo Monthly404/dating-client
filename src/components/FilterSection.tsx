@@ -216,24 +216,24 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
 
     // 2. 지역 필터 (행정동 코드)
     if (selectedRegionCodes.length > 0) {
-      const otherCode = SEOUL_DISTRICT_CODES["기타"];
+      const otherCode = SEOUL_DISTRICT_CODES["그 외"];
       const hasOther = selectedRegionCodes.includes(otherCode);
 
       if (hasOther) {
-        // "기타"가 포함된 경우
+        // "그 외"가 포함된 경우
         const selectedMainCodes = selectedRegionCodes.filter(
           (code) => code !== otherCode,
         );
 
         if (selectedMainCodes.length === 0) {
-          // "기타"만 선택된 경우: 4개 주요 구를 exclude
+          // "그 외"만 선택된 경우: 4개 주요 구를 exclude
           filters.push({
             type: "REGION_CODE",
             includes: [],
             excludes: MAIN_DISTRICT_CODES,
           });
         } else {
-          // "기타"와 다른 구가 함께 선택된 경우
+          // "그 외"와 다른 구가 함께 선택된 경우
           // 선택된 구는 includes, 선택되지 않은 주요 구는 excludes
           const excludeCodes = MAIN_DISTRICT_CODES.filter(
             (code) => !selectedMainCodes.includes(code),
@@ -245,7 +245,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
           });
         }
       } else {
-        // "기타"가 선택되지 않은 경우: 기존 로직 (선택된 구만 includes)
+        // "그 외"가 선택되지 않은 경우: 기존 로직 (선택된 구만 includes)
         filters.push({
           type: "REGION_CODE",
           includes: selectedRegionCodes,
@@ -346,7 +346,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onApply }) => {
         <div className="filter-content-scroll">
           {/* 1. 날짜 필터 */}
           <div className="filter-group">
-            <h4>기간</h4>
+            <h4>진행 기간</h4>
             <div className="date-range-container">
               <label className="date-input-label">
                 <input
