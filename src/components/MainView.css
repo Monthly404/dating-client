@@ -33,6 +33,12 @@
   overflow: hidden;
   box-shadow: var(--shadow-md);
   background-color: var(--color-primary); /* Fallback */
+  user-select: none;
+  cursor: grab;
+}
+
+.hero-carousel:active {
+  cursor: grabbing;
 }
 
 .hero-slide {

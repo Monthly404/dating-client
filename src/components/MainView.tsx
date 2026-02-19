@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterSection from "./FilterSection";
 import MeetingCard from "./MeetingCard";
@@ -109,14 +109,57 @@ const MainView: React.FC = () => {
       page.datings.map(transformDatingGroupToMeeting),
     ) || [];
 
-  /** 히어로 캐러셀 자동 전환 */
-  useEffect(() => {
-    const timer = setInterval(() => {
+  /** 슬라이드 변경 + 타이머 리셋 */
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const resetTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     }, CAROUSEL_INTERVAL);
-
-    return () => clearInterval(timer);
   }, []);
+
+  const goToSlide = useCallback(
+    (index: number) => {
+      setCurrentSlide(index);
+      resetTimer();
+    },
+    [resetTimer],
+  );
+
+  /** 히어로 캐러셀 자동 전환 */
+  useEffect(() => {
+    resetTimer();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [resetTimer]);
+
+  /** 스와이프/드래그 처리 */
+  const dragStartX = useRef(0);
+  const isDragging = useRef(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const handleDragStart = (clientX: number) => {
+    dragStartX.current = clientX;
+    isDragging.current = true;
+  };
+
+  const handleDragEnd = (clientX: number) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const diff = dragStartX.current - clientX;
+    const threshold = 50;
+    if (Math.abs(diff) < threshold) return;
+
+    if (diff > 0) {
+      goToSlide((currentSlide + 1) % HERO_SLIDES.length);
+    } else {
+      goToSlide(
+        (currentSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length,
+      );
+    }
+  };
 
   /** 모임 카드 클릭 시 상세 페이지로 이동 */
   const handleCardClick = (id: number) => {
@@ -147,7 +190,17 @@ const MainView: React.FC = () => {
         {/* 히어로 섹션 */}
         <section className="hero-section">
           <h2>지금 뜨는 인기 모임</h2>
-          <div className="hero-carousel">
+          <div
+            className="hero-carousel"
+            ref={carouselRef}
+            onMouseDown={(e) => handleDragStart(e.clientX)}
+            onMouseUp={(e) => handleDragEnd(e.clientX)}
+            onMouseLeave={(e) => handleDragEnd(e.clientX)}
+            onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+            onTouchEnd={(e) =>
+              handleDragEnd(e.changedTouches[0].clientX)
+            }
+          >
             {/* 슬라이드 목록 */}
             {HERO_SLIDES.map((slide, index) => (
               <div
@@ -170,7 +223,7 @@ const MainView: React.FC = () => {
                 <button
                   key={index}
                   className={`dot ${index === currentSlide ? "active" : ""}`}
-                  onClick={() => setCurrentSlide(index)}
+                  onClick={() => goToSlide(index)}
                   aria-label={`슬라이드 ${index + 1}로 이동`}
                 />
               ))}
