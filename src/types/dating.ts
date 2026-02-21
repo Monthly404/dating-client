@@ -119,6 +119,11 @@ export interface TagResponse {
   value?: string;
 }
 
+export interface KeywordResponse {
+  type: "AI" | "MANUAL";
+  value: string;
+}
+
 export interface VendorProfileResponse {
   id: number;
   name: string;
@@ -138,6 +143,9 @@ export interface DatingResponse {
   maxAge?: number;
   headCount?: number;
   tags?: TagResponse[];
+  keywords?: KeywordResponse[];
+  description?: string;
+  aiDescription?: string;
   vendor?: VendorProfileResponse;
 }
 

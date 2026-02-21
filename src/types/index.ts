@@ -13,6 +13,7 @@ export interface Meeting {
   location: string;
   price: string; // Formatting as string for display convenience '50,000원'
   tags: string[];
+  aiKeywords?: string[];
   time?: string;
   ageGroup?: string;
   company?: string;
