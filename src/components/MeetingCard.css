@@ -145,3 +145,33 @@
   padding: 4px 10px;
   border-radius: 6px;
 }
+
+.card-ai-keywords {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.card-ai-keywords .ai-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.card-ai-keywords .ai-keyword-tag {
+  background-color: rgba(99, 102, 241, 0.08);
+  color: #6366f1;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+}

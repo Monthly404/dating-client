@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./DetailView.css";
 import "./common/Skeleton.css"; // Skeleton 스타일 추가
@@ -9,6 +9,7 @@ import EmptyState from "./common/EmptyState";
 import { useGetDatingGroup } from "../queries/useDatingQueries";
 import {
   formatAgeGroup,
+  formatAiKeywords,
   formatDatingSchedule,
   formatLocation,
   formatPrice,
@@ -17,6 +18,37 @@ import {
 import { getFallbackImage, handleImageError } from "../utils/imageFallback";
 import { Tag } from "./common/Tag";
 import GoogleMap from "./common/GoogleMap";
+
+const AiDescriptionInner: React.FC<{ text: string }> = ({ text }) => {
+  const [displayedLength, setDisplayedLength] = useState(0);
+
+  useEffect(() => {
+    if (displayedLength >= text.length) return;
+    const timer = setTimeout(() => {
+      setDisplayedLength((prev) => Math.min(prev + 1, text.length));
+    }, 40);
+    return () => clearTimeout(timer);
+  }, [displayedLength, text]);
+
+  return (
+    <div className="ai-description-section">
+      <div className="ai-description-header">
+        <span className="ai-badge">AI</span>
+        <span>AI 큐레이터의 코멘트</span>
+      </div>
+      <p className="ai-description-text">
+        {text.slice(0, displayedLength)}
+        {displayedLength < text.length && (
+          <span className="ai-cursor">|</span>
+        )}
+      </p>
+    </div>
+  );
+};
+
+const AiDescription: React.FC<{ text: string }> = ({ text }) => (
+  <AiDescriptionInner key={text} text={text} />
+);
 
 const DetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -149,6 +181,7 @@ const DetailView: React.FC = () => {
   const ageGroupStr =
     formatAgeGroup(datingGroup.minAge, datingGroup.maxAge) || "연령 제한 없음";
   const tags = formatTags(datingGroup);
+  const aiKeywords = formatAiKeywords(datingGroup);
 
   return (
     <div className="detail-page">
@@ -248,6 +281,21 @@ const DetailView: React.FC = () => {
                     <Tag key={index}>{tag}</Tag>
                   ))}
                 </div>
+
+                {aiKeywords.length > 0 && (
+                  <div className="ai-keywords-container">
+                    <span className="ai-label">AI</span>
+                    {aiKeywords.map((keyword, index) => (
+                      <Tag key={index} className="ai-keyword-tag">
+                        {keyword}
+                      </Tag>
+                    ))}
+                  </div>
+                )}
+
+                {datingGroup.aiDescription && (
+                  <AiDescription text={datingGroup.aiDescription} />
+                )}
               </div>
 
               <Button

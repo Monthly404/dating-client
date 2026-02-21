@@ -61,6 +61,17 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting, onClick }) => {
             ))}
           </div>
         )}
+
+        {meeting.aiKeywords && meeting.aiKeywords.length > 0 && (
+          <div className="card-ai-keywords">
+            <span className="ai-label">AI</span>
+            {meeting.aiKeywords.map((keyword, index) => (
+              <Tag key={index} className="ai-keyword-tag">
+                {keyword}
+              </Tag>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import type { Meeting } from "../types";
 import { DAY_MAP, formatShortDate } from "../utils/dateFormat";
 import {
   formatAgeGroup,
+  formatAiKeywords,
   formatDatingSchedule,
   formatPrice,
   formatTags,
@@ -63,6 +64,7 @@ const transformDatingGroupToMeeting = (group: DatingResponse): Meeting => {
     location: group.address?.gugun || "",
     price: formatPrice(group.price),
     tags: formatTags(group),
+    aiKeywords: formatAiKeywords(group),
     time: timeStr,
     ageGroup: formatAgeGroup(group.minAge, group.maxAge),
     company: group.vendor?.name || "",
