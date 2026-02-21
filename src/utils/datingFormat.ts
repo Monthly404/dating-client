@@ -134,3 +134,16 @@ export const formatTags = (datingGroup: DatingResponse): string[] => {
       .map((tag) => `#${tag.value}`) || []
   );
 };
+
+/**
+ * AI 키워드만 추출
+ * @param datingGroup 소개팅 그룹 정보
+ * @returns AI 키워드 값 배열
+ */
+export const formatAiKeywords = (datingGroup: DatingResponse): string[] => {
+  return (
+    datingGroup.keywords
+      ?.filter((keyword) => keyword.type === "AI")
+      .map((keyword) => keyword.value) || []
+  );
+};
