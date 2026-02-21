@@ -46,7 +46,7 @@
 
 #### 1. REGION_CODE - 지역 코드 필터
 
-행정동 코드(5자리)로 지역을 필터링합니다.
+구/군 코드(5자리)로 지역을 필터링합니다.
 
 **파라미터:**
 
@@ -252,21 +252,24 @@
 
 **DatingResponse 필드:**
 
-| 필드      | 타입                     | 설명                         |
-| --------- | ------------------------ | ---------------------------- |
-| id        | `Long`                   | 소개팅 ID                    |
-| name      | `String`                 | 모임 이름                    |
-| thumbnail | `String`                 | 썸네일 이미지 URL (nullable) |
-| link      | `String`                 | 상세 정보 링크 (nullable)    |
-| address   | `AddressResponse`        | 주소 정보 (nullable)         |
-| apply     | `PeriodResponse`         | 신청 기간 (nullable)         |
-| schedule  | `DatingScheduleResponse` | 일정 정보 (nullable)         |
-| price     | `Integer`                | 참가 비용 (nullable)         |
-| minAge    | `Integer`                | 최소 나이 (nullable)         |
-| maxAge    | `Integer`                | 최대 나이 (nullable)         |
-| headCount | `Integer`                | 모집 인원 (nullable)         |
-| tags      | `List<TagResponse>`      | 태그 목록                    |
-| vendor    | `VendorProfileResponse`  | 주최자 정보 (nullable)       |
+| 필드          | 타입                     | 설명                         |
+| ------------- | ------------------------ | ---------------------------- |
+| id            | `Long`                   | 소개팅 ID                    |
+| name          | `String`                 | 모임 이름                    |
+| thumbnail     | `String`                 | 썸네일 이미지 URL (nullable) |
+| link          | `String`                 | 상세 정보 링크 (nullable)    |
+| address       | `AddressResponse`        | 주소 정보 (nullable)         |
+| apply         | `PeriodResponse`         | 신청 기간 (nullable)         |
+| schedule      | `DatingScheduleResponse` | 일정 정보 (nullable)         |
+| price         | `Integer`                | 참가 비용 (nullable)         |
+| minAge        | `Integer`                | 최소 나이 (nullable)         |
+| maxAge        | `Integer`                | 최대 나이 (nullable)         |
+| headCount     | `Integer`                | 모집 인원 (nullable)         |
+| tags          | `List<TagResponse>`      | 태그 목록                    |
+| keywords      | `List<KeywordResponse>`  | 키워드 목록                  |
+| description   | `String`                 | 모임 상세 설명 (nullable)    |
+| aiDescription | `String`                 | AI 생성 모임 설명 (nullable) |
+| vendor        | `VendorProfileResponse`  | 주최자 정보 (nullable)       |
 
 **AddressResponse 필드:**
 
@@ -309,6 +312,13 @@
 | ----- | -------- | ------------------------------------------------------------------- |
 | type  | `String` | 태그 타입 (CONCEPT, AFTER_PARTY, ONLINE, LOCAL_GOVERNMENT, ALCOHOL) |
 | value | `String` | 태그 값 (nullable)                                                  |
+
+**KeywordResponse 필드:**
+
+| 필드  | 타입     | 설명                         |
+| ----- | -------- | ---------------------------- |
+| type  | `String` | 키워드 타입 (`AI`, `MANUAL`) |
+| value | `String` | 키워드 값                    |
 
 **VendorProfileResponse 필드:**
 
@@ -363,6 +373,18 @@
             "value": "사설"
           }
         ],
+        "keywords": [
+          {
+            "type": "AI",
+            "value": "와인"
+          },
+          {
+            "type": "MANUAL",
+            "value": "강남"
+          }
+        ],
+        "description": "강남에서 열리는 프리미엄 와인 소개팅입니다.",
+        "aiDescription": "와인을 주제로 한 세련된 분위기의 소개팅으로, 강남 중심부에서 진행됩니다.",
         "vendor": {
           "id": 1,
           "name": "와인파티클럽",
@@ -415,6 +437,14 @@
             "value": "지자체"
           }
         ],
+        "keywords": [
+          {
+            "type": "AI",
+            "value": "등산"
+          }
+        ],
+        "description": null,
+        "aiDescription": "주말마다 진행되는 건강한 등산 소개팅입니다.",
         "vendor": null
       }
     ]
@@ -602,6 +632,14 @@ GET /api/datings/1
         "value": "와인파티"
       }
     ],
+    "keywords": [
+      {
+        "type": "AI",
+        "value": "와인"
+      }
+    ],
+    "description": "강남에서 열리는 프리미엄 와인 소개팅입니다.",
+    "aiDescription": "와인을 주제로 한 세련된 분위기의 소개팅으로, 강남 중심부에서 진행됩니다.",
     "vendor": {
       "id": 1,
       "name": "와인파티클럽",
